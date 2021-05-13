@@ -21,6 +21,6 @@
     "awadau": "^1.1.9",
     "cmdline-util": "^1.1.0",
     "os-utils": "^0.0.14",
-    "yargs-lite": "^1.0.1"
+    "yargs-lite": "^1.1.0"
   }
 }
