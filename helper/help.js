@@ -23,7 +23,7 @@ module.exports = class {
    * @param {{_?:int, args?:string, kwargs?:string}[]} listen _ for index position; bind _, args and kwargs together
    *
    */
-  addLink(listen = [{}]) {
+  addLink(...listen) {
     /**
      * @param {store} storage
      * three way bind
@@ -64,7 +64,8 @@ module.exports = class {
    * @param {(storage:store)=>{}} action
    */
   addAction(action = () => {}) {
-    this.perform[this._holder.name] = (storage) => action(u.mapMerge(storage, this._holder.sequence(storage)));
+    let that = this._holder.sequence;
+    this.perform[this._holder.name] = (storage) => action(u.mapMerge(storage, that(storage)));
   }
 
   compile() {
