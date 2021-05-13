@@ -4,11 +4,14 @@
   "description": "",
   "main": "./bin/index.js",
   "scripts": {
-    "test": "./bin/in"
+    "build": "npm remove -g ucmd2 && npm i && npm i -g . && sudo ln -s $(command -v u) /usr/bin/u"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Truth1984/ucmd2.git"
+  },
+  "bin": {
+    "u": "bin/index.js"
   },
   "keywords": [],
   "author": "",

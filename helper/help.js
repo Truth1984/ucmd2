@@ -64,7 +64,7 @@ module.exports = class {
    * @param {(storage:store)=>{}} action
    */
   addAction(action = () => {}) {
-    let that = this._holder.sequence;
+    let that = this._holder.sequence ? this._holder.sequence : (i) => i;
     this.perform[this._holder.name] = (storage) => action(u.mapMerge(storage, that(storage)));
   }
 

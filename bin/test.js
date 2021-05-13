@@ -7,6 +7,8 @@ const cmd = require("../helper/_cmd");
 let yargs = new yargslite();
 let h = new Helpdoc("u", "Author: Awada.Z");
 
+h.addEntry("--version").addAction(() => console.log(require("../package.json").version));
+
 h.addEntry("_env").addAction(() => console.log(process.env));
 
 h.addEntry("_home").addAction(() => cmd("echo ~"));
