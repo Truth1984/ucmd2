@@ -1,0 +1,26 @@
+{
+  "name": "ucmd2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./bin/index.js",
+  "scripts": {
+    "test": "./bin/in"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Truth1984/ucmd2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Truth1984/ucmd2/issues"
+  },
+  "homepage": "https://github.com/Truth1984/ucmd2#readme",
+  "dependencies": {
+    "awadau": "^1.1.9",
+    "cmdline-util": "^1.1.0",
+    "os-utils": "^0.0.14",
+    "yargs-lite": "^1.0.1"
+  }
+}
