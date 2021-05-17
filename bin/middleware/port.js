@@ -1,5 +1,6 @@
-const os = require("os");
 const u = require("awadau");
+// const cu = require("cmdline-util");
+const os = require("os");
 const { h, cmd } = require("../head");
 
 h.addEntry("port", "scan for a specific port", {
@@ -15,15 +16,22 @@ h.addEntry("port", "scan for a specific port", {
   )
   .addAction((argv) => {
     let args = argv.args;
+    let port = args.p;
+    let docker = args.d;
+    let connection = args.c;
+
     if (os.platform() == "win32") {
-      if (!args.p) return cmd("netstat -bn");
-      return cmd("netstat -bn | grep " + args.p[0]);
+      if (!port) return cmd("netstat -bn");
+      return cmd("netstat -bn | grep " + port);
     }
 
-    if (args.d) {
-      if (u.equal(args.d, [])) return cmd(`sudo docker ps --format "{{.Ports}}\t:\t{{.Image}}"`);
-      else return cmd(`sudo docker ps | grep  ${args.d[0]}`);
+    if (docker) {
+      if (u.equal(docker, [])) return cmd(`sudo docker ps --format "{{.Ports}}\t:\t{{.Image}}"`);
+      else return cmd(`sudo docker ps | grep ${docker}`);
     }
-    if (!args.p) return cmd("sudo netstat -plntu");
-    return cmd("sudo netstat -lntup | grep " + args.p[0]);
+
+    if (connection) return cmd(`sudo lsof -i :${connection}`);
+
+    if (!port) return cmd("sudo netstat -plntu");
+    return cmd("sudo netstat -lntup | grep " + port);
   });

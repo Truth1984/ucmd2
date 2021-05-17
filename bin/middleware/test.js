@@ -2,7 +2,7 @@
 // const cu = require("cmdline-util");
 const { h, cmd } = require("../head");
 
-h.addEntry("--version").addAction(() => console.log(require("../package.json").version));
+h.addEntry("--version", "find u version").addAction(() => console.log(require("../../package.json").version));
 
 h.addEntry("_env").addAction(() => console.log(process.env));
 

@@ -1,13 +1,20 @@
+// const u = require("awadau");
+// const cu = require("cmdline-util");
 const { h, cmd } = require("../head");
 
 h.addEntry("ip", "find local ip address", {
   "": "find inet of web interface",
-  "-p,--public": "port number or process name",
+  "-p,--public": "find public ip address of host",
+  "-d,--dns": "dns lookup",
 })
-  .addLink({ args: "p", kwargs: "public" })
+  .addLink({ args: "p", kwargs: "public" }, { args: "d", kwargs: "dns" })
   .addAction((argv) => {
     let args = argv.args;
-    if (args.p) return cmd(`curl ident.me`);
+    let public = args.p;
+    let dns = args.d;
+
+    if (public) return cmd(`curl ident.me`);
+    if (dns) return cmd(`nslookup ${dns}`);
 
     return cmd("ifconfig | grep inet", true);
   });
