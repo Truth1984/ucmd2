@@ -7,7 +7,13 @@ h.addEntry("quick", "record command into quick folder", {
   "-r,--remove": "remove command",
   "-a,--append": "replace ... with value, then add to end if ... not exist",
 })
-  .addLink({ _: 0, args: "n", kwargs: "name" }, { args: "d", kwargs: "display" })
+  .addLink(
+    { _: 0, args: "n", kwargs: "name" },
+    { args: "c", kwargs: "command" },
+    { args: "d", kwargs: "display" },
+    { args: "r", kwargs: "remove" },
+    { args: "a", kwargs: "append" }
+  )
   .addAction(async (argv) => {
     let quickPath = un.filePathNormalize(__dirname, "../../quick");
     await un.fileMkdir(quickPath, true);
