@@ -1,11 +1,6 @@
-const yargslite = require("yargs-lite");
-const Helpdoc = require("../helper/help");
-const u = require("awadau");
-const cu = require("cmdline-util");
-const cmd = require("../helper/_cmd");
-
-let yargs = new yargslite();
-let h = new Helpdoc("u", "Author: Awada.Z");
+// const u = require("awadau");
+// const cu = require("cmdline-util");
+const { h, cmd } = require("../head");
 
 h.addEntry("--version").addAction(() => console.log(require("../package.json").version));
 
@@ -33,5 +28,3 @@ h.addEntry("_display", "display the storage").addAction((argv) => console.log(ar
 h.addEntry("_echo", "echo the command", { "0,-l,--line": "the line to echo" })
   .addLink({ _: 0, args: "l", kwargs: "line" })
   .addAction((argv) => console.log(argv.kwargs.line[0]));
-
-module.exports = { yargs, h };
