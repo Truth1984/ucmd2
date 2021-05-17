@@ -1,9 +1,7 @@
-// const u = require("awadau");
-// const cu = require("cmdline-util");
 const { h, cmd } = require("../head");
 
 h.addEntry("ip", "find local ip address", {
-  "": "find inet of web interface",
+  "[0]": "find inet of web interface",
   "-p,--public": "find public ip address of host",
   "-d,--dns": "dns lookup",
 })

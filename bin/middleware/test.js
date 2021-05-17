@@ -1,5 +1,3 @@
-// const u = require("awadau");
-// const cu = require("cmdline-util");
 const { h, cmd } = require("../head");
 
 h.addEntry("--version", "find u version").addAction(() => console.log(require("../../package.json").version));

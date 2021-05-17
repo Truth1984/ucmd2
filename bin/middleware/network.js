@@ -1,9 +1,7 @@
-const u = require("awadau");
-// const cu = require("cmdline-util");
-const { h, cmd } = require("../head");
+const { h, cmd, u } = require("../head");
 
 h.addEntry("network", "live network display", {
-  "": "display all the network connection",
+  "[0]": "display all the network connection",
   "-d,--device": "device for showing network details",
   "-t,--tcp": "tcp connection status",
   "-l,--list": "list web interfaces details",

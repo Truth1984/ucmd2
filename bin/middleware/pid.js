@@ -1,10 +1,7 @@
-const u = require("awadau");
-const cu = require("cmdline-util");
-const { h, cmd } = require("../head");
+const { h, cmd, u, cu } = require("../head");
 
 h.addEntry("pid", "find system information about the target id", {
-  "": "find inet of web interface",
-  "-p,--pid": "pid to work on",
+  "[0],-p,--pid": "pid to work on",
   "-f,--find": "find pid, return first result, return -1 if not found, reduce grep noise",
   "-s,--system": "systemctl status about target",
   "-d,--directory": "directory of running process",

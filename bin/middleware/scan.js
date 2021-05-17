@@ -1,10 +1,8 @@
-// const u = require("awadau");
-const cu = require("cmdline-util");
-const { h, cmd } = require("../head");
+const { h, cmd, cu } = require("../head");
 
 h.addEntry("scan", "probe target machine", {
-  "-i,--ip": "ip to probe",
-  "-p,--port": "port to probe",
+  "[0],-i,--ip": "ip to probe",
+  "[1],-p,--port": "port to probe",
   "-A,--all": "probe all ports",
 })
   .addLink({ _: 0, args: "i", kwargs: "ip" }, { _: 1, args: "p", kwargs: "port" }, { args: "A", kwargs: "all" })

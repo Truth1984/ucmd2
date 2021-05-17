@@ -1,10 +1,8 @@
-const u = require("awadau");
-// const cu = require("cmdline-util");
 const os = require("os");
-const { h, cmd } = require("../head");
+const { h, cmd, u } = require("../head");
 
 h.addEntry("port", "scan for a specific port", {
-  "-p,--port,--process": "port number or process name",
+  "[0],-p,--port,--process": "port number or process name",
   "-d,--docker": "docker container port",
   "-c,--connection": "connection details for specific port",
 })
