@@ -41,7 +41,7 @@ h.addEntry("quick", "record command into quick folder", {
     if (append)
       for (let i of append) {
         if (qcmd.indexOf("...") > -1) {
-          qcmd.replace("...", i);
+          qcmd = qcmd.replace("...", i);
         } else {
           qcmd += ` ${i}`;
         }
