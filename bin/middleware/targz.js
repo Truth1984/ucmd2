@@ -10,9 +10,12 @@ h.addEntry("targz", "zip and unzip file", {
     let args = argv.args;
     let zip = args.z;
     let dest = args.d ? args.d : "compressed.tar";
-    let unzip = u.equal(args.u, []) ? dest : args.u;
+    let unzip = args.u;
 
-    if (unzip) return cmd(`tar -xf ${unzip}`, true);
+    if (unzip) {
+      if (u.equal(args.u, [])) unzip = dest;
+      return cmd(`tar -xf ${unzip}`, true);
+    }
     if (zip) return cmd(`tar -cvz ${u.arrayToString(zip, " ")} -f ${dest}`, true);
     return cmd(`u targz --help`);
   });
