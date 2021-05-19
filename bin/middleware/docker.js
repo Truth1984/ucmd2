@@ -159,7 +159,7 @@ h.addEntry("docker", "docker additional command", {
           });
         if (mounts != undefined) for (let i of mounts) await qs(i["Source"]);
       }
-      if (log) return cmd(`sudo docker logs ` + (await fuzzy(target, true)).id);
+      if (log) return cmd(`sudo docker logs ` + (await fuzzy(target, true)).id + " | tail -n500");
       if (live) return cmd(`sudo docker logs -f ` + (await fuzzy(target, true)).id);
       if (logpath) return cmd(`sudo docker inspect --format={{.LogPath}} ` + (await fuzzy(target, true)).id);
       if (pid) return cmd(`sudo docker top ` + (await fuzzy(target, true, true)).id);
