@@ -31,7 +31,7 @@ h.addEntry("pid", "find system information about the target id", {
     let find = args.f;
     let system = args.s;
     let directory = args.d;
-    let Process = args.p;
+    let processes = args.p;
     let detail = args.D;
     let port = args.N;
     let relation = args.R;
@@ -54,7 +54,7 @@ h.addEntry("pid", "find system information about the target id", {
 
     if (system || all) dlog("systemctl", `sudo systemctl status ${pid}`);
     if (directory || all) dlog("starting directory", `sudo pwdx ${pid}`);
-    if (Process || all) dlog("process info (grep)", `sudo ps -auxwwf | grep ${pid}`);
+    if (processes || all) dlog("process info (grep)", `sudo ps -auxwwf | grep ${pid}`);
     if (detail || all) dlog("detailed info", `sudo lsof -p ${pid}`);
     if (port || all) dlog("network port (grep)", `sudo netstat -plntu | grep ${pid}/`);
     if (relation || all) dlog("process relationship", `sudo pstree -laps ${pid}`);
