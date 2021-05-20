@@ -13,6 +13,7 @@ h.addEntry("sys", "display system information", {
   "-c,--cron": "crontab inspect for each user",
 })
   .addLink(
+    { _: 0, args: "t", kwargs: "target" },
     { args: "s", kwargs: "size" },
     { args: "f", kwargs: "filesystem" },
     { args: "b", kwargs: "basic" },
