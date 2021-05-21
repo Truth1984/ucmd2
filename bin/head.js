@@ -161,6 +161,29 @@ un.fileDownload = async (url, outputPath, opt = {}) => {
 
 un.fileStat = (path) => fs.statSync(un.filePathNormalize(path));
 
+un.ansibleUserList = (pattern = "all") => {
+  if (u.equal(pattern, [])) pattern = "all";
+  if (u.reCommonFast().ipv4.test(pattern[0])) return [pattern];
+  let ansibleInventoryLocation = process.env.HOME + `/.application/ansible/hosts`;
+  let line = cmd(`ansible -i ${ansibleInventoryLocation} --list-hosts ${pattern} | tail -n +2`, 0, 1);
+  return u.stringToArray(u.stringReplace(line, { "\n": ",", " ": "", ",$": "" }), ",").filter((a) => a != "");
+};
+
+un.ansibleInventoryData = (pattern = "all") => {
+  if (u.equal(pattern, [])) pattern = "all";
+  let ansibleInventoryLocation = process.env.HOME + `/.application/ansible/hosts`;
+  let result = cmd(`ansible-inventory -i ${ansibleInventoryLocation} --host ${pattern}`, 0, 1, 1);
+  if (result.status == 0) return u.stringToJson(result.stdout);
+  let { user, port, addr } = cu.sshGrep(pattern);
+  return {
+    u_name: "unknown",
+    u_describe: "unknown",
+    ansible_user: user,
+    ansible_port: port,
+    addr,
+  };
+};
+
 let yargs = new yargslite();
 let h = new Helpdoc("u", "Author: Awada.Z");
 module.exports = { yargs, h, cmd, cu, u, un };

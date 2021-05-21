@@ -1,15 +1,15 @@
 const { h, cmd, u } = require("../head");
 h.addEntry("screen", "start a screen command, use ctl+a+[ to enable scroll back mode", {
-  "-c,--command": "command to run in screen",
   "-n,--name": "name of the screen",
+  "-c,--command": "command to run in screen",
   "-r,--reattach": "reattach",
   "-k,--kill": "kill target screen process",
   "-l,--list": "list of screen",
   "-u,--user": "define user, default to 'root'",
 })
   .addLink(
+    { _: 0, args: "n", kwargs: "name" },
     { args: "c", kwargs: "command" },
-    { args: "n", kwargs: "name" },
     { args: "r", kwargs: "reattach" },
     { args: "k", kwargs: "kill" },
     { args: "l", kwargs: "list" },
@@ -33,4 +33,5 @@ h.addEntry("screen", "start a screen command, use ctl+a+[ to enable scroll back 
     if (kill) return cmd(`sudo -u ${user} screen -X -S ${kill} quit`);
     if (reattach) return cmd(`sudo -u ${user} screen -r ${u.equal(reattach, []) ? "" : reattach}`);
     if (list) return cmd(`sudo -u ${user} ls -R /var/run/screen/`);
+    if (name) return cmd(`sudo -u ${user} screen -r ${name}`);
   });

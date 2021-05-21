@@ -1,4 +1,4 @@
-const { h, cmd, u, cu } = require("../head");
+const { h, cmd, u, cu, un } = require("../head");
 h.addEntry("ssh", "use keygen to generate key pairs", {
   "-c,--connect": "connect to the target host by pattern",
   "-i,--initialize": "initialize, add to ansible list and auto connect, [$addr,$name,$desc]",
@@ -21,29 +21,6 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
     let proxy = args.p;
     let refresh = args.r;
 
-    let ansibleInventoryLocation = process.env.HOME + `/.application/ansible/hosts`;
-
-    let ansibleUserList = (pattern = "all") => {
-      if (u.equal(pattern, [])) pattern = "all";
-      if (u.reCommonFast().ipv4.test(pattern[0])) return [pattern];
-      let line = cmd(`ansible -i ${ansibleInventoryLocation} --list-hosts ${pattern} | tail -n +2`, 0, 1);
-      return u.stringToArray(u.stringReplace(line, { "\n": ",", " ": "", ",$": "" }), ",").filter((a) => a != "");
-    };
-
-    let ansibleInvData = (pattern = "all") => {
-      if (u.equal(pattern, [])) pattern = "all";
-      let result = cmd(`ansible-inventory -i ${ansibleInventoryLocation} --host ${pattern}`, 0, 1, 1);
-      if (result == 0) return u.stringToJson(result.stdout);
-      let { user, port, addr } = cu.sshGrep(pattern);
-      return {
-        u_name: "unknown",
-        u_describe: "unknown",
-        ansible_user: user,
-        ansible_port: port,
-        addr,
-      };
-    };
-
     if (initialize) {
       let addrlike = initialize[0];
       let name = initialize[1];
@@ -63,19 +40,19 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
     if (list) return cmd(`u ansible -j ${list}`);
 
     if (connect) {
-      let users = ansibleUserList(connect);
+      let users = un.ansibleUserList(connect);
       let target = u.len(users) > 1 ? cu.multiSelect(users) : users[0];
-      let invdata = ansibleInvData(target);
+      let invdata = un.ansibleInventoryData(target);
       console.log(`connecting to <${target}>, as <${invdata.u_describe}>`);
       return cmd(`ssh -p ${invdata.ansible_port} ${invdata.ansible_user}@${invdata.addr ? invdata.addr : target}`);
     }
 
     if (proxy) {
-      let users = ansibleUserList(proxy[0]);
+      let users = un.ansibleUserList(proxy[0]);
       let localPort = proxy[1] ? proxy[1] : 15542;
       let target = u.len(users) > 1 ? await cu.multiSelect(users) : users[0];
 
-      let invdata = ansibleInvData(target);
+      let invdata = un.ansibleInventoryData(target);
       console.log("using screen to persist connection on port", localPort);
       let line = `ssh -4 -p ${invdata.ansible_port} -D ${localPort} -N ${invdata.ansible_user}@${
         invdata.addr ? invdata.addr : target

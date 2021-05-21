@@ -41,13 +41,6 @@ h.addEntry("ansible", "ansible related command", {
     let preconfig =
       "DISPLAY_SKIPPED_HOSTS=false ANSIBLE_CALLBACK_WHITELIST=profile_tasks ANSIBLE_DEPRECATION_WARNINGS=False";
 
-    let ansibleUserList = (pattern = "all") => {
-      if (u.equal(pattern, [])) pattern = "all";
-      if (u.reCommonFast().ipv4.test(pattern[0])) return [pattern];
-      let line = cmd(`ansible -i ${ansibleInventoryLocation} --list-hosts ${pattern} | tail -n +2`, 0, 1);
-      return u.stringToArray(u.stringReplace(line, { "\n": ",", " ": "", ",$": "" }), ",").filter((a) => a != "");
-    };
-
     if (!un.fileExist(ansibleInventoryLocation)) {
       await un.fileMkdir(un.filePathAnalyze(ansibleInventoryLocation).dirname);
       un.fileWriteSync("", false, ansibleInventoryLocation);
@@ -97,7 +90,7 @@ h.addEntry("ansible", "ansible related command", {
 
     if (json) {
       let result = {};
-      let users = ansibleUserList(json);
+      let users = un.ansibleUserList(json);
       let contentMap = cu.iniParser(un.fileReadSync(ansibleInventoryLocation));
       for (let i of users) {
         for (let [j, k] of u.mapEntries(contentMap)) {
@@ -112,5 +105,5 @@ h.addEntry("ansible", "ansible related command", {
 
     if (cat) return cmd(`cat ${ansibleInventoryLocation}`);
     if (edit) return cmd(`nano ${ansibleInventoryLocation}`);
-    if (list) return console.log(ansibleUserList(list));
+    if (list) return console.log(un.ansibleUserList(list));
   });

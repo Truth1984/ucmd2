@@ -14,8 +14,8 @@ h.addEntry("_webtest", "open test docker on port", {
   .addLink({ _: 0, kwargs: "port", args: "p" }, { args: "r", kwargs: "remove" }, { args: "e", kwargs: "execute" })
   .addAction((argv) => {
     let args = argv.args;
-    if (args.r) return cmd(`u docker -r=web-test`);
-    if (args.e) return cmd(`u docker -e=web-test sh`);
+    if (args.r) return cmd(`u docker web-test -r`);
+    if (args.e) return cmd(`u docker web-test -e sh`);
 
     if (!args.p) args.p = [8080];
     return cmd(`sudo docker run -d --name web-test -p ${args.p[0]}:8000 crccheck/hello-world`);
