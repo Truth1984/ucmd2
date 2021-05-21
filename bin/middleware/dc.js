@@ -48,7 +48,7 @@ h.addEntry("dc", "docker-compose command", {
     if (restart) return cmd("sudo docker-compose restart");
     if (processes) return cmd("sudo docker-compose ps -a");
 
-    let key = cu.multiSelect(u.mapKeys(cu.yamlParser.load("docker-compose.yml").services));
+    let key = cu.multiSelect(u.mapKeys(cu.yamlParser("docker-compose.yml").services));
     if (log) return cmd(`sudo docker-compose logs ${key} | tail -n500`);
     if (live) return cmd(`sudo docker-compose logs -f ${key}`);
     if (execute) {

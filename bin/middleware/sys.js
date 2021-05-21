@@ -47,11 +47,9 @@ h.addEntry("sys", "display system information", {
       };
       if (os.platform() == "linux") {
         let df = cu.shellParser(cmd("df -m", false, true));
-        let dfResult = df.filter(
-          (item) =>
-            item.Filesystem != "overlay" && !u.contains(item.Filesystem, "tmp") && u.int(item["1M-blocks"]) > 10000
-        );
-        basic["fs"] = dfResult;
+        let filters = (i) =>
+          i["Filesystem"] != "overlay" && !u.contains(i["Filesystem"], "tmp") && u.int(i["1M-blocks"]) > 10000;
+        basic["fs"] = df.filter(filters);
       }
       return console.log(basic);
     }
