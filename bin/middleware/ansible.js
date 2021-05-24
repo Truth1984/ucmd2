@@ -12,7 +12,7 @@ h.addEntry("ansible", "ansible related command", {
   "-j,--json": "use json format to present host file",
 })
   .addLink(
-    { args: "n", kwargs: "name" },
+    { _: 0, args: "n", kwargs: "name" },
     { args: "c", kwargs: "command" },
     { args: "s", kwargs: "script" },
     { args: "a", kwargs: "add" },
@@ -75,7 +75,7 @@ h.addEntry("ansible", "ansible related command", {
 
     if (command) {
       command = u.stringReplace(command[0], { "\\$HOME": "~" });
-      let line = `${preconfig} ansible-playbook ${debug} -i ${ansibleInventoryLocation} -e apb_host=${name} -e apb_http_proxy=${proxy} -e apb_runtype=shell -e "apb_shell='${argv.c}'" ${ansiblePlaybookdir}`;
+      let line = `${preconfig} ansible-playbook ${debug} -i ${ansibleInventoryLocation} -e apb_host=${name} -e apb_http_proxy=${proxy} -e apb_runtype=shell -e "apb_shell='${command}'" ${ansiblePlaybookdir}`;
       return cmd(line, 1);
     }
 
