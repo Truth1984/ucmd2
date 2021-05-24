@@ -14,7 +14,7 @@ h.addEntry("exist", "check if file or direcoty exist", {
 
     let exist = un.fileExist(path[0]);
     if (!exist) return console.log(false);
-    if (files) return console.log(!un.fileIsDir(argv.p));
-    if (directory) return console.log(un.fileIsDir(argv.p));
+    if (files) return console.log(!un.fileIsDir(path));
+    if (directory) return console.log(un.fileIsDir(path));
     return console.log(exist);
   });

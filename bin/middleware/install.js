@@ -20,10 +20,10 @@ h.addEntry("install", "install or upgrade command on different platform", {
 
     if (name) {
       name = u.jsonToString(name, " ");
-      if (platform == "apt") return cmd(`sudo apt-get install -y ${argv.n}`);
-      if (platform == "yum") return cmd(`sudo yum install -y ${argv.n}`);
-      if (platform == "brew") return cmd(`sudo brew install -y ${argv.n}`);
-      if (platform == "choco") return cmd(`choco install -y ${argv.n}`);
+      if (platform == "apt") return cmd(`sudo apt-get install -y ${name}`);
+      if (platform == "yum") return cmd(`sudo yum install -y ${name}`);
+      if (platform == "brew") return cmd(`sudo brew install -y ${name}`);
+      if (platform == "choco") return cmd(`choco install -y ${name}`);
     }
 
     if (list) {

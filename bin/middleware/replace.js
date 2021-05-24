@@ -24,7 +24,7 @@ h.addEntry("replace", "replace a string in the file", {
     let test = args.t;
     let recursive = args.R;
 
-    if (!un.fileExist(argv.f)) cu.cmderr("Error: file does not exist", "replace");
+    if (!un.fileExist(filename)) cu.cmderr("Error: file does not exist", "replace");
     let content = un.fileReadSync(filename);
     if (has) return console.log(u.contains(content, has));
     let processed = u.stringReplace(content, cu.jsonParser(pairs), !!recursive, !!globals);
