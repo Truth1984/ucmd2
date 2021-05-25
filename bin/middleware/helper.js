@@ -114,6 +114,12 @@ h.addEntry("helper", "helper for other commands", {
       systemctl: {
         limit: "journalctl --vacuum-size=1G",
       },
+      notify: {
+        gnome: "notify-send 'data'",
+      },
+      js: {
+        typedef: "@typedef {import('download').DownloadOptions} DownloadOptions",
+      },
     };
     if (name) console.log(list[name[0]]);
     else console.log(list);

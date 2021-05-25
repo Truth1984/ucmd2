@@ -41,7 +41,7 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
 
     if (connect) {
       let users = un.ansibleUserList(connect);
-      let target = u.len(users) > 1 ? cu.multiSelect(users) : users[0];
+      let target = u.len(users) > 1 ? await cu.multiSelect(users) : users[0];
       let invdata = un.ansibleInventoryData(target);
       console.log(`connecting to <${target}>, as <${invdata.u_describe}>`);
       return cmd(`ssh -p ${invdata.ansible_port} ${invdata.ansible_user}@${invdata.addr ? invdata.addr : target}`);
