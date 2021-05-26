@@ -51,19 +51,20 @@ h.addEntry("service", "list all the service", {
     if (u.len(program) == 0) program = name;
 
     if (name) return cmd(`sudo systemctl status ${program}`);
-    if (enable)
-      return cmd(
-        `sudo systemctl start ${program} && sudo systemctl enable ${program} && sudo service ${program} status`
-      );
+    if (enable) {
+      cmd(`sudo systemctl start ${program}`);
+      cmd(`sudo systemctl enable ${program}`);
+      return cmd(`sudo service ${program} status`);
+    }
 
     if (disable) {
       if (!absolute) {
         let ans = await cu.cmdsq("disable service: " + program + "(y/N)");
         if (ans[0] != "y") return;
       }
-      return cmd(
-        `sudo systemctl disable ${program} && sudo systemctl stop ${program} && sudo service ${program} status`
-      );
+      cmd(`sudo systemctl disable ${program}`);
+      cmd(`sudo systemctl stop ${program}`);
+      return cmd(`sudo service ${program} status`);
     }
 
     if (restart) return cmd(`sudo systemctl restart ${await fuzzy(name)}`);
