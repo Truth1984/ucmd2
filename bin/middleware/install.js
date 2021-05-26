@@ -19,7 +19,6 @@ h.addEntry("install", "install or upgrade command on different platform", {
     if (os.platform() == "win32") platform = "choco";
 
     if (name) {
-      name = u.jsonToString(name, " ");
       if (platform == "apt") return cmd(`sudo apt-get install -y ${name}`);
       if (platform == "yum") return cmd(`sudo yum install -y ${name}`);
       if (platform == "brew") return cmd(`sudo brew install -y ${name}`);
