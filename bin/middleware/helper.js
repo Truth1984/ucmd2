@@ -120,6 +120,9 @@ h.addEntry("helper", "helper for other commands", {
       js: {
         typedef: "@typedef {import('download').DownloadOptions} DownloadOptions",
       },
+      partition: {
+        delete: "fdisk /dev/sdx , then enter d",
+      },
     };
     if (name) console.log(list[name[0]]);
     else console.log(list);

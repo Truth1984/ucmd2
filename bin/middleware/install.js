@@ -1,4 +1,4 @@
-const { h, cmd, un, u } = require("../head");
+const { h, cmd, un } = require("../head");
 const os = require("os");
 h.addEntry("install", "install or upgrade command on different platform", {
   "[0],-n,--name": "name of the package",
