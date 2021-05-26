@@ -1,6 +1,6 @@
 const { h, cmd, cu } = require("../head");
 h.addEntry("git", "git command integration", {
-  "-h,--head": "head to which branch",
+  "[0],-h,--head": "head to which branch",
   "-m,--movebranch": "move branch to target commit id, as [$branchName,$id]",
   "-M,--moveref": "move refs to target commit id, as [$refName, $id]",
   "-r,--remove": "remove $branchName, locally",

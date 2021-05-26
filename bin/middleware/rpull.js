@@ -27,7 +27,7 @@ h.addEntry("rpull", "rsync pull with ansible", {
     let deletes = args.D;
     let compression = args.C;
 
-    let users = un.ansibleUserList(whom);
+    let users = un.ansibleUserList(whom[0]);
     let opt = `--exclude ${u.arrayToString(exclude, " ")} ${deletes ? "--delete " : ""}`;
 
     for (let i of users) {
