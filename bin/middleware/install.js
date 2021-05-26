@@ -5,7 +5,7 @@ h.addEntry("install", "install or upgrade command on different platform", {
   "-l,--list": "list installed package",
   "-c,--clean": "clean",
 })
-  .addLink({ args: "n", kwargs: "name" }, { args: "l", kwargs: "list" }, { args: "c", kwargs: "clean" })
+  .addLink({ _: 0, args: "n", kwargs: "name" }, { args: "l", kwargs: "list" }, { args: "c", kwargs: "clean" })
   .addAction((argv) => {
     let args = argv.args;
     let name = args.n;
