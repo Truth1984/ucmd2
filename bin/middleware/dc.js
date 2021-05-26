@@ -54,6 +54,6 @@ h.addEntry("dc", "docker-compose command", {
     if (execute) {
       if (u.equal(execute, [])) execute = ["/bin/sh"];
       execute = u.arrayToString(execute, " ");
-      return cmd(`sudo docker-compose exec --privileged -it ${key} ${execute}`);
+      return cmd(`sudo docker-compose exec --privileged ${key} ${execute}`);
     }
   });
