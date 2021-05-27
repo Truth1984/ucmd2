@@ -35,7 +35,7 @@ h.addEntry("git", "git command integration", {
 
     let adog = () => cmd("git log --all --decorate --oneline --graph");
 
-    if (head) cmd(`git checkout ${head}`);
+    if (head) cmd(`git restore . && git checkout ${head}`);
     if (branch) cmd(`git branch ${branch[0]} && git checkout ${branch[0]}`);
 
     if (initialize) {
