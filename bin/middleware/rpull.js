@@ -27,8 +27,8 @@ h.addEntry("rpull", "rsync pull with ansible", {
     let deletes = args.D;
     let compression = args.C;
 
-    let users = un.ansibleUserList(whom[0]);
-    let opt = `--exclude ${u.arrayToString(exclude, " ")} ${deletes ? "--delete " : ""}`;
+    let users = un.ansibleUserList(whom);
+    let opt = `--exclude={${u.arrayToString(exclude)}} ${deletes ? "--delete " : ""}`;
 
     for (let i of users) {
       let data = un.ansibleInventoryData(i);
@@ -39,7 +39,7 @@ h.addEntry("rpull", "rsync pull with ansible", {
       let rArg = "-aAXvPh";
       if (compression) rArg += "z";
 
-      let targetdir = un.filePathNormalize(process.env.PWD, target, i);
+      let targetdir = un.filePathNormalize(process.env.PWD, target[0], addr);
       await un.fileMkdir(targetdir, true);
       cmd(`rsync ${rArg} -e 'ssh -p ${port}' ${opt} ${username + "@" + addr}:'${source}' ${targetdir}`, true);
     }

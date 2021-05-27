@@ -24,9 +24,9 @@ h.addEntry("rpush", "rsync push with ansible", {
       : ["/dev/*", "/proc/*", "/sys/*", "/tmp/*", "/run/*", "/mnt/*", "/media/*", "/lost+found", "/dest"];
     let compression = args.C;
 
-    let users = un.ansibleUserList(whom[0]);
+    let users = un.ansibleUserList(whom);
 
-    let opt = `--exclude ${u.arrayToString(exclude, " ")}`;
+    let opt = `--exclude={${u.arrayToString(exclude)}}`;
     let rArg = "-aAXvPh";
     if (compression) rArg += "z";
 

@@ -163,7 +163,8 @@ un.fileStat = (path) => fs.statSync(un.filePathNormalize(path));
 
 un.ansibleUserList = (pattern = "all") => {
   if (u.equal(pattern, [])) pattern = "all";
-  if (u.reCommonFast().ipv4.test(pattern[0])) return [pattern];
+  if (u.typeCheck(pattern, "arr")) pattern = pattern[0];
+  if (u.reCommonFast().ipv4.test(pattern) || /localhost/.test(pattern)) return [pattern];
   let ansibleInventoryLocation = process.env.HOME + `/.application/ansible/hosts`;
   let line = cmd(`ansible -i ${ansibleInventoryLocation} --list-hosts ${pattern} | tail -n +2`, 0, 1);
   return u.stringToArray(u.stringReplace(line, { "\n": ",", " ": "", ",$": "" }), ",").filter((a) => a != "");
