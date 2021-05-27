@@ -9,9 +9,9 @@ h.addEntry("rpull", "rsync pull with ansible", {
   "-C,--compression": "compression, -z option, might be slower",
 })
   .addLink(
-    { args: "w", kwargs: "whom" },
-    { args: "s", kwargs: "source" },
-    { args: "t", kwargs: "target" },
+    { _: 0, args: "w", kwargs: "whom" },
+    { _: 1, args: "s", kwargs: "source" },
+    { _: 2, args: "t", kwargs: "target" },
     { args: "e", kwargs: "exclude" },
     { args: "D", kwargs: "delete" },
     { args: "C", kwargs: "compression" }

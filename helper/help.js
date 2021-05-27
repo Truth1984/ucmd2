@@ -46,7 +46,7 @@ module.exports = class {
           });
       };
 
-      for (let i in storage._) assign("_", u.int(i), storage._[i]);
+      for (let i in storage._) assign("_", u.int(i), [storage._[i]]);
       for (let i in storage.args) assign("args", i, storage.args[i]);
       for (let i in storage.kwargs) assign("kwargs", i, storage.kwargs[i]);
 
