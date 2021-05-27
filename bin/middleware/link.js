@@ -1,7 +1,6 @@
 const { h, cmd, u } = require("../head");
 h.addEntry("link", "link(ln) particular command to target user group, if command already exist, use $chmod", {
   "-n,--name": "name of the command",
-  "-o,--original": "original link trace",
   "-u,--user": "user to use",
   "-r,--remove": "remove link",
 })

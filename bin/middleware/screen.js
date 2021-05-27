@@ -9,7 +9,7 @@ h.addEntry("screen", "start a screen command, use ctl+a+[ to enable scroll back 
 })
   .addLink(
     { _: 0, args: "n", kwargs: "name" },
-    { args: "c", kwargs: "command" },
+    { _: 1, args: "c", kwargs: "command" },
     { args: "r", kwargs: "reattach" },
     { args: "k", kwargs: "kill" },
     { args: "l", kwargs: "list" },

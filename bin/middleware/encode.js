@@ -4,24 +4,24 @@ h.addEntry("encode", "use different methods on string", {
   "-p,--password": "password generation, define length",
   "-P,--password64": "password generation with auto base64 encode, define length",
   "-m,--md5": "md5 sum calculate",
-  "-b,--encode64": "base64 encode",
+  "-e,--encode64": "base64 encode",
   "-d,--decode64": "base64 decode",
 })
   .addLink(
     { _: 0, args: "l", kwargs: "line" },
     { args: "p", kwargs: "password" },
     { args: "P", kwargs: "password64" },
-    { args: "m", kwargs: "md5" },
-    { args: "b", kwargs: "encode64" },
-    { args: "d", kwargs: "decode64" }
+    { $: 0, args: "m", kwargs: "md5" },
+    { $: 0, args: "e", kwargs: "encode64" },
+    { $: 0, args: "d", kwargs: "decode64" }
   )
   .addAction((argv) => {
     let args = argv.args;
-    let line = args.l;
+    let line = args.l[0];
     let password = args.p;
     let password64 = args.P;
     let md5 = args.m;
-    let encode64 = args.b;
+    let encode64 = args.e;
     let decode64 = args.d;
 
     if (password) return console.log(u.randomPassword(u.equal(password, []) ? 8 : password[0], 1, 1));

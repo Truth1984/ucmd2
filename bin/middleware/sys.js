@@ -14,7 +14,7 @@ h.addEntry("sys", "display system information", {
 })
   .addLink(
     { _: 0, args: "t", kwargs: "target" },
-    { args: "s", kwargs: "size" },
+    { $: 0, args: "s", kwargs: "size" },
     { args: "f", kwargs: "filesystem" },
     { args: "b", kwargs: "basic" },
     { args: "d", kwargs: "detail" },

@@ -1,11 +1,15 @@
 const { h, un } = require("../head");
 
 h.addEntry("exist", "check if file or direcoty exist", {
-  "-p,--path": "path to check",
+  "[0],-p,--path": "path to check",
   "-f,--files": "files only",
   "-d,--directory": "directory only",
 })
-  .addLink({ _: 0, args: "p", kwargs: "path" }, { args: "f", kwargs: "files" }, { args: "d", kwargs: "directory" })
+  .addLink(
+    { _: 0, args: "p", kwargs: "path" },
+    { $: 0, args: "f", kwargs: "files" },
+    { $: 0, args: "d", kwargs: "directory" }
+  )
   .addAction((argv) => {
     let args = argv.args;
     let path = args.p;

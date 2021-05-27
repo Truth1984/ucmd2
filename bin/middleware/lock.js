@@ -5,7 +5,12 @@ h.addEntry("lock", "prevent file from overwritten", {
   "-u,--unlock": "unlock file",
   "-a,--attribute": "attribute inspect",
 })
-  .addLink({ _: 0, args: "f", kwargs: "filename" }, { args: "u", kwargs: "unlock" }, { args: "a", kwargs: "attribute" })
+  .addLink(
+    { _: 0, args: "f", kwargs: "filename" },
+    { $: 0, args: "l", kwargs: "lock" },
+    { $: 0, args: "u", kwargs: "unlock" },
+    { $: 0, args: "a", kwargs: "attribute" }
+  )
   .addAction((argv) => {
     let args = argv.args;
     let filename = args.f;

@@ -14,15 +14,15 @@ h.addEntry("pid", "find system information about the target id", {
 })
   .addLink(
     { _: 0, args: "p", kwargs: "pid" },
-    { args: "f", kwargs: "find" },
-    { args: "s", kwargs: "system" },
-    { args: "d", kwargs: "directory" },
-    { args: "p", kwargs: "process" },
-    { args: "N", kwargs: "port" },
-    { args: "D", kwargs: "detail" },
-    { args: "R", kwargs: "relation" },
-    { args: "n", kwargs: "network" },
-    { args: "A", kwargs: "all" },
+    { $: 0, args: "f", kwargs: "find" },
+    { $: 0, args: "s", kwargs: "system" },
+    { $: 0, args: "d", kwargs: "directory" },
+    { $: 0, args: "p", kwargs: "process" },
+    { $: 0, args: "N", kwargs: "port" },
+    { $: 0, args: "D", kwargs: "detail" },
+    { $: 0, args: "R", kwargs: "relation" },
+    { $: 0, args: "n", kwargs: "network" },
+    { $: 0, args: "A", kwargs: "all" },
     { args: "l", kwargs: "log" }
   )
   .addAction((argv) => {

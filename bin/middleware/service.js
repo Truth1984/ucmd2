@@ -1,6 +1,6 @@
 const { h, cmd, u, cu } = require("../head");
 h.addEntry("service", "list all the service", {
-  "-n,--name": "name of the service, check stauts",
+  "[0],-n,--name": "name of the service, check stauts",
   "-e,--enable": "enable a service, and start",
   "-d,--disable": "disable a service",
   "-r,--restart": "restart service",
