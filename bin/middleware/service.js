@@ -12,11 +12,11 @@ h.addEntry("service", "list all the service", {
 })
   .addLink(
     { _: 0, args: "n", kwargs: "name" },
-    { args: "e", kwargs: "enable" },
-    { args: "d", kwargs: "disable" },
-    { args: "r", kwargs: "restart" },
-    { args: "l", kwargs: "log" },
-    { args: "L", kwargs: "logfull" },
+    { $: 0, args: "e", kwargs: "enable" },
+    { $: 0, args: "d", kwargs: "disable" },
+    { $: 0, args: "r", kwargs: "restart" },
+    { $: 0, args: "l", kwargs: "log" },
+    { $: 0, args: "L", kwargs: "logfull" },
     { args: "A", kwargs: "absolute" },
     { args: "a", kwargs: "active" },
     { args: "i", kwargs: "inactive" }
@@ -50,7 +50,6 @@ h.addEntry("service", "list all the service", {
     let program = await fuzzy(name);
     if (u.len(program) == 0) program = name;
 
-    if (name) return cmd(`sudo systemctl status ${program}`);
     if (enable) {
       cmd(`sudo systemctl start ${program}`);
       cmd(`sudo systemctl enable ${program}`);
@@ -70,5 +69,6 @@ h.addEntry("service", "list all the service", {
     if (restart) return cmd(`sudo systemctl restart ${await fuzzy(name)}`);
     if (log) return cmd(`sudo journalctl -u ${await fuzzy(name)}.service -b `);
     if (logfull) return cmd(`sudo journalctl -u ${await fuzzy(name)}.service`);
+    if (name) return cmd(`sudo systemctl status ${program}`);
     cmd(`sudo systemctl list-units --type service --all`);
   });

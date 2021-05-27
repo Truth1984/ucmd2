@@ -1,7 +1,7 @@
 const { h, cmd, u, cu } = require("../head");
 
 h.addEntry("docker", "docker additional command", {
-  "-t,--target": "target to manipulate",
+  "[0],-t,--target": "target to manipulate",
   "-b,--build": "build dockerfile with result name, as [$targetName:version,$sourcefile]",
   "-s,--stop": "stop the container",
   "-S,--start": "start the container",
@@ -26,22 +26,22 @@ h.addEntry("docker", "docker additional command", {
   .addLink(
     { _: 0, args: "t", kwargs: "target" },
     { args: "b", kwargs: "build" },
-    { args: "s", kwargs: "stop" },
-    { args: "S", kwargs: "start" },
+    { $: 0, args: "s", kwargs: "stop" },
+    { $: 0, args: "S", kwargs: "start" },
 
-    { args: "r", kwargs: "remove" },
-    { args: "R", kwargs: "removefull" },
-    { args: "e", kwargs: "run" },
-    { args: "E", kwargs: "execute" },
+    { $: 0, args: "r", kwargs: "remove" },
+    { $: 0, args: "R", kwargs: "removefull" },
+    { $: 0, args: "e", kwargs: "run" },
+    { $: 0, args: "E", kwargs: "execute" },
     { args: "c", kwargs: "clean" },
-    { args: "T", kwargs: "transfer" },
+    { $: 0, args: "T", kwargs: "transfer" },
 
     { args: "o", kwargs: "overview" },
     { args: "n", kwargs: "network" },
     { args: "v", kwargs: "volume" },
-    { args: "f", kwargs: "logpath" },
-    { args: "l", kwargs: "log" },
-    { args: "L", kwargs: "live" },
+    { $: 0, args: "f", kwargs: "logpath" },
+    { $: 0, args: "l", kwargs: "log" },
+    { $: 0, args: "L", kwargs: "live" },
     { args: "i", kwargs: "images" },
     { args: "p", kwargs: "process" },
     { args: "P", kwargs: "pid" }
@@ -72,7 +72,7 @@ h.addEntry("docker", "docker additional command", {
     let pid = args.P;
 
     let dockerps = () =>
-      cu.shellParser(cmd("sudo docker ps", 0, 1), {
+      cu.shellParser(cmd("sudo docker ps -a", 0, 1), {
         skipHead: 1,
         selfProvideHeader: ["CONTAINER ID", "IMAGE", "COMMAND", "CREATED", "STATUS", "PORTS", "NAMES"],
         separator: /\s{2,80}/,
@@ -116,6 +116,7 @@ h.addEntry("docker", "docker additional command", {
     }
 
     if (target) {
+      target = target[0];
       if (transfer) {
         if (u.contains(transfer, ".tar")) return cmd(`sudo docker load < ${transfer}`);
         if (u.contains(transfer, ":")) {

@@ -23,6 +23,6 @@ h.addEntry("_webtest", "open test docker on port", {
 
 h.addEntry("_display", "display the storage").addAction((argv) => console.log(argv));
 
-h.addEntry("_echo", "echo the command", { "0,-l,--line": "the line to echo" })
-  .addLink({ _: 0, args: "l", kwargs: "line" })
+h.addEntry("_echo", "echo the command", { "[0],-l,--line": "the line to echo", "-e": "extra $ args test" })
+  .addLink({ _: 0, args: "l", kwargs: "line" }, { $: 0, args: "e" })
   .addAction((argv) => console.log(argv.kwargs.line[0]));
