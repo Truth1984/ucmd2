@@ -70,7 +70,7 @@ h.addEntry("ansible", "ansible related command", {
         };
 
       let str = u.reSub(cu.iniWriter(contentMap), /(\d+.\d+.\d+.\d+)=true/, "$1");
-      return un.fileWriteSync(str, true, contentMap);
+      return un.fileWriteSync(str, true, ansibleInventoryLocation);
     }
 
     if (command) {
