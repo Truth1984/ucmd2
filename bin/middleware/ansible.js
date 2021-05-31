@@ -55,7 +55,7 @@ h.addEntry("ansible", "ansible related command", {
       let { user, addr, port } = cu.sshGrep(addrlike);
       let content = un.fileReadSync(ansibleInventoryLocation);
       if (u.contains(content, addr)) return console.log(`ansible already has ${addr}`);
-      let contentMap = cu.iniParser(content);
+      let contentMap = u.stringToJson(u.jsonToString(cu.iniParser(content)));
       contentMap = u.mapMergeDeep(contentMap, { [name]: { [addr]: true } });
 
       let ipIdentify = u.reCommonFast().iplocal.test(addr) ? "local" : "remote";
@@ -69,8 +69,8 @@ h.addEntry("ansible", "ansible related command", {
           u_describe: desc,
         };
 
-      let str = u.reSub(cu.iniWriter(contentMap), /(\d+.\d+.\d+.\d+)=true/, "$1");
-      return un.fileWriteSync(str, true, ansibleInventoryLocation);
+      let str = u.reSub(cu.iniWriter(contentMap), /(\d+.\d+.\d+.\d+)=true/g, "$1");
+      return un.fileWriteSync(str, false, ansibleInventoryLocation);
     }
 
     if (command) {
