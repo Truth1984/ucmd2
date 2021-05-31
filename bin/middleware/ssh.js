@@ -33,7 +33,7 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
       let status = cmd(`ssh-copy-id -i ~/.ssh/id_rsa.pub -p ${port} ${user}@${addr}`, 0, 1, 1).status;
       if (status > 0) return cu.cmderr("ssh-copy-id status > 0, abort", "ssh");
       cmd(`u quick ${name} -c "ssh -p ${port} ${user}@${addr}"`);
-      cmd(`u ansible -i ${addr} ${name} '${desc}'`);
+      cmd(`u ansible -a ${addr} ${name} '${desc}'`);
     }
 
     if (refresh) return cmd("ssh-keygen -t rsa -b 4096");
