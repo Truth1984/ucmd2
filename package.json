@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Truth1984/ucmd2#readme",
   "dependencies": {
     "awadau": "^1.1.9",
-    "cmdline-util": "^1.1.0",
+    "cmdline-util": "^1.2.0",
     "download": "^8.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^10.0.0",

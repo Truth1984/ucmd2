@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  registry0:
+    image: registry:latest
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 8000:8000
+    volumes:
+      - volume0:/v0
+    restart: always
+volumes:
+  volume0: []

@@ -13,7 +13,7 @@ h.addEntry("sf", "search the file content in location, basedir default to curren
     { _: 1, args: "b", kwargs: "base" },
     { args: "i", kwargs: "ignore" },
     { args: "D", kwargs: "depth" },
-    { args: "s", kwargs: "show" },
+    { $: 0, args: "s", kwargs: "show" },
     { args: "A", kwargs: "all" }
   )
   .addAction(async (argv) => {

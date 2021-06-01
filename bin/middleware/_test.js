@@ -1,4 +1,4 @@
-const { h, cmd, un } = require("../head");
+const { h, cmd, u, un, cu } = require("../head");
 
 h.addEntry("--version", "find u version").addAction(() => console.log(require("../../package.json").version));
 
@@ -30,3 +30,29 @@ h.addEntry("_dlink", "display link storage", { "[0],-l,--link": "link to display
 h.addEntry("_echo", "echo the command", { "[0],-l,--line": "the line to echo", "-e": "extra $ args test" })
   .addLink({ _: 0, args: "l", kwargs: "line" }, { $: 0, args: "e" })
   .addAction((argv) => console.log(argv.kwargs.line[0]));
+
+h.addEntry("_dctp", "docker compose template", { "[0],-a,--amount": "amount of services" })
+  .addLink({ _: 0, args: "a", kwargs: "amount" })
+  .addAction((argv) => {
+    let args = argv.args;
+    let amount = args.a;
+    if (u.equal(amount, []) || !amount) amount = [1];
+    amount = amount[0];
+    if (un.fileExist("docker-compose.yml")) return cu.cmderr("docker-compose.yml already exists", "_dctp");
+
+    let content = {
+      version: "3.8",
+      services: {},
+    };
+    for (let i = 0; i < amount; i++) {
+      content.services["registry" + i] = {
+        image: "registry:latest",
+        extra_hosts: ["host.docker.internal:host-gateway"],
+        ports: ["8000:8000"],
+        volumes: [`volume${i}:/v${i}`],
+        restart: "always",
+      };
+    }
+
+    un.fileWriteSync(cu.yamlWriter(content, 4), 0, "docker-compose.yml");
+  });
