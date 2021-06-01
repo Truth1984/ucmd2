@@ -60,8 +60,15 @@ h.addEntry("sys", "display system information", {
     }
 
     if (largegrep) return cmd(`sudo du -ahx ${target} | sort -rh | grep ${largegrep} | head -n 30`);
-    if (cron)
-      return cmd("for user in $(cut -f1 -d: /etc/passwd); do echo ---$user--- ; sudo crontab -u $user -l ; done");
+
+    if (cron) {
+      let users = u.stringToArray(cmd("cut -f1 -d: /etc/passwd", 0, 1), "\n");
+      users.pop();
+      for (let i of users)
+        if (!cmd(`sudo crontab -u ${i} -l`, 0, 1, 1).status) cmd(`echo ---${i}---; sudo crontab -u ${i} -l`);
+
+      return console.log(`---finished---`);
+    }
 
     if (un.fileIsDir(target)) return cmd(`cd ${target} && ls -alFh`);
     else return cmd(`stat ${target}`);
