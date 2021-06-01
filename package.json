@@ -1,6 +1,6 @@
 {
   "name": "ucmd2",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "main": "./bin/index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Truth1984/ucmd2#readme",
   "dependencies": {
     "awadau": "^1.1.9",
-    "cmdline-util": "^1.2.0",
+    "cmdline-util": "^1.2.1",
     "download": "^8.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^10.0.0",
