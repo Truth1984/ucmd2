@@ -17,7 +17,7 @@ h.addEntry("pid", "find system information about the target id", {
     { $: 0, args: "f", kwargs: "find" },
     { $: 0, args: "s", kwargs: "system" },
     { $: 0, args: "d", kwargs: "directory" },
-    { $: 0, args: "p", kwargs: "process" },
+    { $: 0, args: "P", kwargs: "process" },
     { $: 0, args: "N", kwargs: "port" },
     { $: 0, args: "D", kwargs: "detail" },
     { $: 0, args: "R", kwargs: "relation" },
@@ -31,7 +31,7 @@ h.addEntry("pid", "find system information about the target id", {
     let find = args.f;
     let system = args.s;
     let directory = args.d;
-    let processes = args.p;
+    let processes = args.P;
     let detail = args.D;
     let port = args.N;
     let relation = args.R;
@@ -46,10 +46,8 @@ h.addEntry("pid", "find system information about the target id", {
 
     if (find) {
       let procList = cu.shellParser(cmd("ps -aux", false, true), { REST: true });
-      let filtered = procList.filter(
-        (item) => u.contains(item.COMMAND, find[0]) || u.contains(item["$REST$"], find[0])
-      );
-      console.log(filtered[0] && !u.contains(filtered[0]["$REST$"], ["pid", "-f", find[0]]) ? filtered[0].PID : -1);
+      let filtered = procList.filter((item) => u.contains(item.COMMAND, pid[0]) || u.contains(item["$REST$"], pid[0]));
+      console.log(filtered[0] && !u.contains(filtered[0]["$REST$"], ["pid", "-f", pid[0]]) ? filtered[0].PID : -1);
     }
 
     if (system || all) dlog("systemctl", `sudo systemctl status ${pid}`);
