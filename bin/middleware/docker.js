@@ -85,8 +85,9 @@ h.addEntry("docker", "docker additional command", {
         separator: /\s{2,80}/,
       });
 
-    let dlog = (describe, line) => {
+    let dlog = (describe, line, grep) => {
       console.log("-----", describe, "-----");
+      if (u.len(grep) > 0) line += ` | grep ${grep}`;
       return cmd(line);
     };
 
@@ -138,11 +139,12 @@ h.addEntry("docker", "docker additional command", {
       }
 
       if (run) {
-        if (u.equal(run, [])) run = ["/bin/sh"];
-        run = u.arrayToString(run, " ");
+        if (!run[1]) run = [target, "/bin/bash"];
         let rid = (await fuzzy(target, true, true)).id;
         if (!rid) rid = target;
-        return cmd(`sudo docker $(sudo docker ps | grep -q ${rid} && echo "exec" || echo "run") -it ${rid} ${run}`);
+        let status = cmd(`sudo docker ps | grep -q ${rid}`, 0, 1, 1).status;
+        if (!status) run[0] = rid;
+        return cmd(`sudo docker ${status ? "run" : "exec"} -it ${run[0]} ${run[1]}`);
       }
 
       if (remove) {
@@ -164,12 +166,14 @@ h.addEntry("docker", "docker additional command", {
       if (live) return cmd(`sudo docker logs -f ` + (await fuzzy(target, true)).id);
       if (logpath) return cmd(`sudo docker inspect --format={{.LogPath}} ` + (await fuzzy(target, true)).id);
       if (pid) return cmd(`sudo docker top ` + (await fuzzy(target, true, true)).id);
+
+      return cmd(`sudo docker inspect ${target}`);
     }
 
     if (clean) cmd("sudo docker system prune --volumes");
-    if (volume || overview) dlog("volume", "sudo docker volume ls");
-    if (processes || overview) dlog("process", "sudo docker ps -a");
-    if (images || overview) dlog("image", "sudo docker images -a");
-    if (network || overview) dlog("network", "sudo docker network ls");
+    if (volume || overview) dlog("volume", "sudo docker volume ls", volume);
+    if (processes || overview) dlog("process", "sudo docker ps -a", processes);
+    if (images || overview) dlog("image", "sudo docker images -a", images);
+    if (network || overview) dlog("network", "sudo docker network ls", network);
     if (overview) dlog("info", "sudo docker info");
   });
