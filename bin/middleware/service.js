@@ -66,9 +66,9 @@ h.addEntry("service", "list all the service", {
       return cmd(`sudo service ${program} status`);
     }
 
-    if (restart) return cmd(`sudo systemctl restart ${await fuzzy(name)}`);
-    if (log) return cmd(`sudo journalctl -u ${await fuzzy(name)}.service -b `);
-    if (logfull) return cmd(`sudo journalctl -u ${await fuzzy(name)}.service`);
+    if (restart) return cmd(`sudo systemctl restart ${program}`);
+    if (log) return cmd(`sudo journalctl -u ${program}.service -b `);
+    if (logfull) return cmd(`sudo journalctl -u ${program}.service`);
     if (name) return cmd(`sudo systemctl status ${program}`);
     cmd(`sudo systemctl list-units --type service --all`);
   });
