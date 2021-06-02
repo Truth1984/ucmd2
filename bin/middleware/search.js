@@ -1,4 +1,4 @@
-const { h, u, un } = require("../head");
+const { h, u, un, cu } = require("../head");
 
 h.addEntry("search", "find the file name in target location, basedir default to current location", {
   "[0],-n,--name": "name of the file",
@@ -10,7 +10,8 @@ h.addEntry("search", "find the file name in target location, basedir default to 
   "-d,--directory": "directory only",
   "-f,--file": "file only",
   "-D,--depth": "depth of subdirectory, default to '10'",
-  "-E,--eval":
+  "-e,--eval": "takes object like {day:-1}, filter directly on mtime(content modify) object",
+  "-E,--evalfull":
     "stat files, then filter them based on eval; {mtime: content, ctime: content + location or permission, atime: access, readtime}; " +
     "example: 'u.dateAdd({day:-1}) < mtime && u.dateAdd({day:-3}) > atime'",
 })
@@ -25,7 +26,8 @@ h.addEntry("search", "find the file name in target location, basedir default to 
     { args: "d", kwargs: "directory" },
     { args: "f", kwargs: "file" },
     { args: "D", kwargs: "depth" },
-    { args: "E", kwargs: "eval" }
+    { args: "e", kwargs: "eval" },
+    { args: "E", kwargs: "evalfull" }
   )
   .addAction(async (argv) => {
     let args = argv.args;
@@ -37,7 +39,8 @@ h.addEntry("search", "find the file name in target location, basedir default to 
     let directory = args.d;
     let file = args.f;
     let depth = args.D ? args.D : 10;
-    let evals = args.E;
+    let evals = args.e;
+    let evalfull = args.E;
 
     let options = {
       type: "files_directories",
@@ -58,9 +61,16 @@ h.addEntry("search", "find the file name in target location, basedir default to 
 
     if (evals) {
       result = result.filter((i) => {
+        let { mtime } = un.fileStat(i.fullPath);
+        return u.dateAdd(cu.jsonParser(evals[0])) < mtime;
+      });
+    }
+
+    if (evalfull) {
+      result = result.filter((i) => {
         // eslint-disable-next-line no-unused-vars
         let { atime, ctime, mtime } = un.fileStat(i.fullPath);
-        return eval(evals[0]);
+        return eval(evalfull[0]);
       });
     }
 
