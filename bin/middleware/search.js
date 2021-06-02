@@ -12,7 +12,7 @@ h.addEntry("search", "find the file name in target location, basedir default to 
   "-D,--depth": "depth of subdirectory, default to '10'",
   "-E,--eval":
     "stat files, then filter them based on eval; {mtime: content, ctime: content + location or permission, atime: access, readtime}; " +
-    "example: 'u.timeAdd({day:-1}) < mtime && u.timeAdd({day:-3}) > atime'",
+    "example: 'u.dateAdd({day:-1}) < mtime && u.dateAdd({day:-3}) > atime'",
 })
   .addLink(
     { _: 0, args: "n", kwargs: "name" },
@@ -30,7 +30,7 @@ h.addEntry("search", "find the file name in target location, basedir default to 
   .addAction(async (argv) => {
     let args = argv.args;
     let name = args.n;
-    let base = args.b ? args.b : ".";
+    let base = args.b ? args.b[0] : ".";
     let ignored = args.i ? args.i : ["!.git", "!*modules", "!mnt"];
     let ignoref = args.I;
     let array = args.a;
@@ -60,7 +60,7 @@ h.addEntry("search", "find the file name in target location, basedir default to 
       result = result.filter((i) => {
         // eslint-disable-next-line no-unused-vars
         let { atime, ctime, mtime } = un.fileStat(i.fullPath);
-        return eval(evals);
+        return eval(evals[0]);
       });
     }
 
