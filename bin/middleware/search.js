@@ -10,7 +10,8 @@ h.addEntry("search", "find the file name in target location, basedir default to 
   "-d,--directory": "directory only",
   "-f,--file": "file only",
   "-D,--depth": "depth of subdirectory, default to '10'",
-  "-e,--eval": "takes object like {day:-1}, filter directly on mtime(content modify) object",
+  "-e,--eval":
+    "takes object like [ {day:-1} {} ]; as (start < mtime < end), filter directly on mtime(content modify) object",
   "-E,--evalfull":
     "stat files, then filter them based on eval; {mtime: content, ctime: content + location or permission, atime: access, readtime}; " +
     "example: 'u.dateAdd({day:-1}) < mtime && u.dateAdd({day:-3}) > atime'",
@@ -62,7 +63,9 @@ h.addEntry("search", "find the file name in target location, basedir default to 
     if (evals) {
       result = result.filter((i) => {
         let { mtime } = un.fileStat(i.fullPath);
-        return u.dateAdd(cu.jsonParser(evals[0])) < mtime;
+        if (u.equal(evals[0], {})) evals[0] = { year: -100 };
+        if (!evals[1] || u.equal(evals[1], {})) evals[1] = { year: 100 };
+        return u.dateAdd(cu.jsonParser(evals[0])) < mtime && mtime < u.dateAdd(cu.jsonParser(evals[1]));
       });
     }
 
