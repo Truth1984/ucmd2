@@ -23,7 +23,7 @@ h.addEntry("pid", "find system information about the target id", {
     { $: 0, args: "R", kwargs: "relation" },
     { $: 0, args: "n", kwargs: "network" },
     { $: 0, args: "A", kwargs: "all" },
-    { args: "l", kwargs: "log" }
+    { $: 0, args: "l", kwargs: "log" }
   )
   .addAction((argv) => {
     let args = argv.args;
@@ -57,5 +57,5 @@ h.addEntry("pid", "find system information about the target id", {
     if (port || all) dlog("network port (grep)", `sudo netstat -plntu | grep ${pid}/`);
     if (relation || all) dlog("process relationship", `sudo pstree -laps ${pid}`);
     if (network || all) dlog("established network connection (grep)", `sudo lsof -i | grep ${pid}`);
-    if (log) return cmd(`sudo strace -p${pid} -f -t -e ${u.equal(log, []) ? "all" : log}`);
+    if (log) return cmd(`sudo strace -p${log[0]} -f -t -e ${log[1] ? log[1] : "all"}`);
   });
