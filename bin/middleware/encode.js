@@ -1,8 +1,8 @@
 const { h, cmd, u, cu } = require("../head");
 h.addEntry("encode", "use different methods on string", {
   "-l,--line": "line to manipulate",
-  "-p,--password": "password generation, define length",
-  "-P,--password64": "password generation with auto base64 encode, define length",
+  "-p,--password": "password generation, define [length=8,strong=1,symbol=1]",
+  "-P,--password64": "password generation with auto base64 encode, define [length=8,strong=1,symbol=1]",
   "-m,--md5": "md5 sum calculate",
   "-e,--encode64": "base64 encode",
   "-d,--decode64": "base64 decode",
@@ -17,20 +17,21 @@ h.addEntry("encode", "use different methods on string", {
   )
   .addAction((argv) => {
     let args = argv.args;
-    let line = args.l[0];
+    let line = args.l;
     let password = args.p;
     let password64 = args.P;
     let md5 = args.m;
     let encode64 = args.e;
     let decode64 = args.d;
 
-    if (password) return console.log(u.randomPassword(u.equal(password, []) ? 8 : password[0], 1, 1));
+    if (password) return console.log(u.randomPassword(...u.arrayMerge([8, 1, 1], password.map(u.int))));
     if (password64)
       return console.log(
-        Buffer.from(u.randomPassword(u.equal(password, []) ? 8 : password[0], 1, 1)).toString("base64")
+        Buffer.from(u.randomPassword(...u.arrayMerge([8, 1, 1], password64.map(u.int)))).toString("base64")
       );
 
     if (!line) return cu.cmderr("base string not defined", "encode");
+    line = line[0];
     if (md5) return cmd(`echo -n ${line} | md5sum`);
     if (encode64) return console.log(Buffer.from(line).toString("base64"));
     if (decode64) return console.log(Buffer.from(line, "base64").toString());
