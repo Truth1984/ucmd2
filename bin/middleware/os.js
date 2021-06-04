@@ -4,7 +4,7 @@ const os = require("os");
 h.addEntry("os", "find your os name", {
   "-i,--is": "is it ... ? can be win | linux | mac | centos ...",
   "-v,--version": "find versions",
-  "-n,--codename": "codename for ubuntu / debian",
+  "-c,--codename": "codename for ubuntu / debian",
 })
   .addLink({ _: 0, args: "i", kwargs: "is" }, { args: "v", kwargs: "find" }, { args: "c", kwargs: "codename" })
   .addAction((argv) => {
