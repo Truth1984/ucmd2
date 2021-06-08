@@ -8,6 +8,7 @@ h.addEntry("docker", "docker additional command", {
 
   "-r,--remove": "remove container",
   "-R,--removefull": "remove container and its volume",
+  "-z,--restart": "restart docker container",
   "-e,--run": "run or execute with sh",
   "-E,--execute": "execute directly with sh,$or target",
   "-c,--clean": "clean <none> images",
@@ -31,6 +32,7 @@ h.addEntry("docker", "docker additional command", {
 
     { $: 0, args: "r", kwargs: "remove" },
     { $: 0, args: "R", kwargs: "removefull" },
+    { $: 0, args: "z", kwargs: "restart" },
     { $: 0, args: "e", kwargs: "run" },
     { $: 0, args: "E", kwargs: "execute" },
     { args: "c", kwargs: "clean" },
@@ -56,6 +58,7 @@ h.addEntry("docker", "docker additional command", {
 
     let remove = args.r;
     let removefull = args.R;
+    let restart = args.z;
     let run = args.e;
     let execute = args.E;
     let clean = args.c;
@@ -132,6 +135,7 @@ h.addEntry("docker", "docker additional command", {
 
       if (stop) return cmd(`sudo docker container stop ` + (await fuzzy(target, true)).id);
       if (start) return cmd(`sudo docker container start ` + (await fuzzy(target, true)).id);
+      if (restart) return cmd(`sudo docker container restart ` + (await fuzzy(target, true)).id);
       if (execute) {
         if (u.equal(execute, [])) execute = ["/bin/sh"];
         execute = u.arrayToString(execute, " ");
