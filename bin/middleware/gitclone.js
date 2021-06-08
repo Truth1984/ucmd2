@@ -30,7 +30,7 @@ h.addEntry("gitclone", "git clone into current folder", {
 
     if (dockerize) {
       if (!un.fileExist("package.json")) return cu.cmderr("package.json not found", "gitclone");
-      return cmd(`bash <(curl -s https://truth1984.github.io/testSites/node/prep.sh)`);
+      return cmd(`wget -O - https://truth1984.github.io/testSites/node/prep.sh | bash`);
     }
 
     cmd(`git clone https://github.com/${username}/${name}.git ${destination}`);
