@@ -171,7 +171,7 @@ h.addEntry("docker", "docker additional command", {
       if (logpath) return cmd(`sudo docker inspect --format={{.LogPath}} ` + (await fuzzy(target, true)).id);
       if (pid) return cmd(`sudo docker top ` + (await fuzzy(target, true, true)).id);
 
-      return cmd(`sudo docker inspect ${target}`);
+      return cmd(`sudo docker inspect ${(await fuzzy(target, 1, 1)).id}`);
     }
 
     if (clean) cmd("sudo docker system prune --volumes");
