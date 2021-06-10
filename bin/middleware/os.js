@@ -33,6 +33,7 @@ h.addEntry("os", "find your os name", {
     if (codename) {
       if (check("ubuntu")) return cmd(`env -i bash -c '. /etc/os-release; echo $VERSION_CODENAME'`);
       if (check("debian")) return cmd(`dpkg --status tzdata|grep Provides|cut -f2 -d'-'`);
+      return;
     }
 
     console.log({
@@ -40,5 +41,6 @@ h.addEntry("os", "find your os name", {
       platform: os.platform(),
       arch: os.arch(),
       username: os.userInfo().username,
+      release: os.release(),
     });
   });
