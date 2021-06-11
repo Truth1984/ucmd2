@@ -33,11 +33,26 @@ module.exports = class {
       let freshObj = { _: [], args: {}, kwargs: {} };
 
       /**
-       * @param {"_" | "args" | "kwargs"} type
+       * @param {"_" | "args"} type
        */
       let assign = (type, typeTarget, value) => {
         if (typeTarget != undefined)
-          u.arrayOfMapSearchStrict(listen, { [type]: typeTarget }).map((item) => {
+          u.arrayOfMapSearch(listen, { [type]: typeTarget }).map((item) => {
+            if (item._ != undefined) freshObj._[item._] = value;
+            if (item.args != undefined) freshObj.args[item.args] = value;
+            if (item.kwargs != undefined) freshObj.kwargs[item.kwargs] = value;
+
+            if (item.$ != undefined && freshObj._[item.$] == undefined) assign("_", item.$, value);
+          });
+      };
+
+      /**
+       * @param {"kwargs"} type
+       */
+      let assignKwargs = (type, typeTarget, value) => {
+        if (typeTarget != undefined)
+          u.arrayOfMapSearch(listen, { [type]: typeTarget }).map((item) => {
+            if (item.kwargs != typeTarget) return;
             if (item._ != undefined) freshObj._[item._] = value;
             if (item.args != undefined) freshObj.args[item.args] = value;
             if (item.kwargs != undefined) freshObj.kwargs[item.kwargs] = value;
@@ -48,7 +63,7 @@ module.exports = class {
 
       for (let i in storage._) assign("_", u.int(i), [storage._[i]]);
       for (let i in storage.args) assign("args", i, storage.args[i]);
-      for (let i in storage.kwargs) assign("kwargs", i, storage.kwargs[i]);
+      for (let i in storage.kwargs) assignKwargs("kwargs", i, storage.kwargs[i]);
 
       return freshObj;
     };
