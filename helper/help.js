@@ -37,7 +37,7 @@ module.exports = class {
        */
       let assign = (type, typeTarget, value) => {
         if (typeTarget != undefined)
-          u.arrayOfMapSearch(listen, { [type]: typeTarget }).map((item) => {
+          u.arrayOfMapSearchStrict(listen, { [type]: typeTarget }).map((item) => {
             if (item._ != undefined) freshObj._[item._] = value;
             if (item.args != undefined) freshObj.args[item.args] = value;
             if (item.kwargs != undefined) freshObj.kwargs[item.kwargs] = value;

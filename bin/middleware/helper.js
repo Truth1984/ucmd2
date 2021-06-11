@@ -110,6 +110,7 @@ h.addEntry("helper", "helper for other commands", {
       nginx: {
         reload: "nginx -s reload",
         "bind-failed": "sudo setenforce 0",
+        "pid not found": "sudo nginx -s reload",
       },
       systemctl: {
         limit: "journalctl --vacuum-size=1G",
