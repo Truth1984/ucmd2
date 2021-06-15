@@ -57,5 +57,5 @@ h.addEntry("pid", "find system information about the target id", {
     if (port || all) dlog("network port (grep)", `sudo netstat -plntu | grep ${pid}/`);
     if (relation || all) dlog("process relationship", `sudo pstree -laps ${pid}`);
     if (network || all) dlog("established network connection (grep)", `sudo lsof -i | grep ${pid}`);
-    if (log) return cmd(`sudo strace -p${log[0]} -f -t -e ${log[1] ? log[1] : "all"}`);
+    if (log) return cmd(`sudo strace -p${log[0] ? log[0] : pid} -f -t -e ${log[1] ? log[1] : "all"}`);
   });
