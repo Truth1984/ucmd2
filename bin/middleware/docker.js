@@ -77,14 +77,14 @@ h.addEntry("docker", "docker additional command", {
     let dockerps = () =>
       cu.shellParser(cmd("sudo docker ps -a", 0, 1), {
         skipHead: 1,
-        selfProvideHeader: ["CONTAINER ID", "IMAGE", "COMMAND", "CREATED", "STATUS", "PORTS", "NAMES"],
+        selfProvideHeader: ["CONTAINER ID", "IMAGE", "COMMAND", "CREATED", "STATUS", "PORTS", "NAMES", "$REST$"],
         separator: /\s{2,80}/,
       });
 
     let dockerimg = () =>
       cu.shellParser(cmd("docker images -a", 0, 1), {
         skipHead: 1,
-        selfProvideHeader: ["REPOSITORY", "TAG", "IMAGE ID", "CREATED", "SIZE"],
+        selfProvideHeader: ["REPOSITORY", "TAG", "IMAGE ID", "CREATED", "SIZE", "$REST$"],
         separator: /\s{2,80}/,
       });
 

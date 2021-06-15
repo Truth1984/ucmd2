@@ -18,6 +18,7 @@ h.addEntry("_webtest", "open test docker on port", {
     if (args.e) return cmd(`u docker web-test -e sh`);
 
     if (!args.p) args.p = [8080];
+    cmd(`u docker web-test -r`);
     return cmd(`sudo docker run -d --name web-test -p ${args.p[0]}:8000 crccheck/hello-world`);
   });
 

@@ -5,13 +5,17 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
   "-l,--list": "list each ip in details with ansible",
   "-p,--proxy": "proxy socks5 to [$host,$localport=15542]",
   "-r,--refresh": "refresh keygen token",
+  "-n,--nat":
+    "nat traversal,[$targetHost, $targetPort, $localPort, $localHost=localhost(can be local ip)]\n" +
+    "\t\t\tmodify server config: 1. nano /etc/ssh/sshd_config 2. `GatewayPorts yes` 3. restart sshd service",
 })
   .addLink(
     { _: 0, args: "c", kwargs: "connect" },
     { args: "i", kwargs: "initialize" },
     { args: "l", kwargs: "list" },
     { args: "p", kwargs: "proxy" },
-    { args: "r", kwargs: "refresh" }
+    { args: "r", kwargs: "refresh" },
+    { args: "n", kwargs: "nat" }
   )
   .addAction(async (argv) => {
     let args = argv.args;
@@ -20,6 +24,7 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
     let list = args.l;
     let proxy = args.p;
     let refresh = args.r;
+    let nat = args.n;
 
     if (initialize) {
       let addrlike = initialize[0];
@@ -58,5 +63,26 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
         invdata.addr ? invdata.addr : target
       }`;
       return cmd(`u screen -c '${line}' -n 'sshproxy${localPort}' `);
+    }
+
+    if (nat) {
+      let targetHost = nat[0];
+      let targetPort = nat[1];
+      let localPort = nat[2];
+      let localHost = nat[3];
+      if (!targetHost || !targetPort || !localPort)
+        return cu.cmderr("$targetHostPattern, $targetPort, $localPort, $localHost? undefined", "nat");
+      if (!localHost) localHost = "localhost";
+
+      let users = un.ansibleUserList(targetHost);
+      let target = u.len(users) > 1 ? await cu.multiSelect(users) : users[0];
+      let invdata = un.ansibleInventoryData(target);
+
+      return cmd(
+        `ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${invdata.ansible_port} ${invdata.ansible_user}@${
+          invdata.addr ? invdata.addr : target
+        } &`,
+        1
+      );
     }
   });
