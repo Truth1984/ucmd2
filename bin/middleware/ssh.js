@@ -81,7 +81,7 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
       cmd(
         `sudo docker run -d --name=sshNat${localPort} -v ${
           process.env.HOME
-        }/.ssh:/root/.ssh:ro -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${
+        }/.ssh:/root/.ssh:ro -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${
           invdata.ansible_port
         } ${invdata.ansible_user}@${invdata.addr ? invdata.addr : target}`
       );
