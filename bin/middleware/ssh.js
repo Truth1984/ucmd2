@@ -72,17 +72,18 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
       let localHost = nat[3];
       if (!targetHost || !targetPort || !localPort)
         return cu.cmderr("$targetHostPattern, $targetPort, $localPort, $localHost? undefined", "nat");
-      if (!localHost) localHost = "localhost";
+      if (!localHost) localHost = "host.docker.internal";
 
       let users = un.ansibleUserList(targetHost);
       let target = u.len(users) > 1 ? await cu.multiSelect(users) : users[0];
       let invdata = un.ansibleInventoryData(target);
 
-      return cmd(
-        `ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${invdata.ansible_port} ${invdata.ansible_user}@${
-          invdata.addr ? invdata.addr : target
-        } &`,
-        1
+      cmd(
+        `sudo docker run -d --name=sshNat${localPort} -v ${
+          process.env.HOME
+        }/.ssh:/root/.ssh:ro -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${
+          invdata.ansible_port
+        } ${invdata.ansible_user}@${invdata.addr ? invdata.addr : target}`
       );
     }
   });
