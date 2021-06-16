@@ -7,6 +7,7 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
   "-r,--refresh": "refresh keygen token",
   "-n,--nat":
     "nat traversal,[$targetHost, $targetPort, $localPort, $localHost=localhost(can be local ip)]\n" +
+    "\t\t\tforward request from localHost:localPort to targetHost:targetPort\n" +
     "\t\t\tmodify server config: 1. nano /etc/ssh/sshd_config 2. `GatewayPorts yes` 3. restart sshd service",
 })
   .addLink(
@@ -78,8 +79,8 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
       let target = u.len(users) > 1 ? await cu.multiSelect(users) : users[0];
       let invdata = un.ansibleInventoryData(target);
 
-      cmd(
-        `sudo docker run -d --name=sshNat${localPort} -v ${
+      return cmd(
+        `sudo docker run -d --name=${targetHost}sshNat${localPort} -v ${
           process.env.HOME
         }/.ssh:/root/.ssh:ro -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${
           invdata.ansible_port
