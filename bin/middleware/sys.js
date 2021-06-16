@@ -24,7 +24,7 @@ h.addEntry("sys", "display system information", {
   )
   .addAction(async (argv) => {
     let args = argv.args;
-    let target = args.t ? args.t : ".";
+    let target = args.t ? args.t[0] : ".";
     let size = args.s;
     let filesystem = args.f;
     let basic = args.b;
