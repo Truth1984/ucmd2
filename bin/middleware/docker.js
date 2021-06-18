@@ -46,7 +46,7 @@ h.addEntry("docker", "docker additional command", {
     { $: 0, args: "L", kwargs: "live" },
     { args: "i", kwargs: "images" },
     { args: "p", kwargs: "process" },
-    { args: "P", kwargs: "pid" }
+    { $: 0, args: "P", kwargs: "pid" }
   )
   .addAction(async (argv) => {
     let args = argv.args;
