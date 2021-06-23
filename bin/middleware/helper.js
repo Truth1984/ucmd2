@@ -1,4 +1,4 @@
-const { h, cmd, cu, un } = require("../head");
+const { h, cmd, cu, un, u } = require("../head");
 h.addEntry("helper", "helper for other commands", {
   "-n,--name": "name",
   "-e,--edit": "edit with code",
@@ -118,6 +118,24 @@ h.addEntry("helper", "helper for other commands", {
       notify: {
         gnome: "notify-send 'data'",
       },
+      info: {
+        script:
+          `#!/bin/sh
+DATESTAMP=$(date +%d-%m-%y)
+TIMESTAMP=$(date +%d-%m-%y-%H-%M)
+DIR=$HOME/Documents/infolog
+FPATH=$DIR/$DATESTAMP.log
+DAYS_KEEP=30
+
+mkdir -p $DIR
+echo $TIMESTAMP >> $FPATH
+free -m | awk 'NR==2{printf "Memory Usage: %s/%sMB (%.2f%%)\\n", $3,$2,$3*100/$2 }' >> $FPATH
+df -h | awk '$NF=="/"{printf "Disk Usage: %d/%dGB (%s)\\n", $3,$2,$5}' >> $FPATH
+top -bn3 | grep load | awk '{printf "CPU Load: %.2f\\n", $(NF-2)}' >> $FPATH 
+echo "" >> $FPATH
+` + "find ${DIR}* -mtime +$DAYS_KEEP -exec rm -f {} \\; 2> /dev/null",
+        crontab: "0 * * * * ",
+      },
       js: {
         typedef: "@typedef {import('download').DownloadOptions} DownloadOptions",
       },
@@ -125,6 +143,6 @@ h.addEntry("helper", "helper for other commands", {
         delete: "fdisk /dev/sdx , then enter d",
       },
     };
-    if (name) console.log(list[name[0]]);
+    if (name) console.log(u.mapGetPath(list, name));
     else console.log(list);
   });
