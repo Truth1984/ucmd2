@@ -65,6 +65,15 @@ h.addEntry("helper", "helper for other commands", {
         "day 1, 3, 4, 5": "0 0 1,3-5 * *",
         order: "min (0 - 59) | hour (0 - 23) | day of month (1 - 31) | month (1 - 12) | day of week (0 - 6)",
         output: "location: /var/log/syslog",
+        clean: `chattr -R -ia /var/spool/cron
+        chattr -ia /etc/crontab
+        chattr -R -ia /etc/cron.d
+        chattr -R -ia /var/spool/cron/crontabs
+        crontab -r
+        rm -rf /var/spool/cron/*
+        rm -rf /etc/cron.d/*
+        rm -rf /var/spool/cron/crontabs
+        rm -rf /etc/crontab`,
       },
       grep: {
         or: "pattern1\\|pattern2",
