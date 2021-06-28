@@ -69,11 +69,7 @@ h.addEntry("helper", "helper for other commands", {
         chattr -ia /etc/crontab
         chattr -R -ia /etc/cron.d
         chattr -R -ia /var/spool/cron/crontabs
-        crontab -r
-        rm -rf /var/spool/cron/*
-        rm -rf /etc/cron.d/*
-        rm -rf /var/spool/cron/crontabs
-        rm -rf /etc/crontab`,
+        crontab -r`,
       },
       grep: {
         or: "pattern1\\|pattern2",
