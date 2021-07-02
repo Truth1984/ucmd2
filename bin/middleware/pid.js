@@ -50,6 +50,7 @@ h.addEntry("pid", "find system information about the target id", {
       console.log(filtered[0] && !u.contains(filtered[0]["$REST$"], ["pid", "-f", pid[0]]) ? filtered[0].PID : -1);
     }
 
+    if (pid && u.stringCheckType(pid, "num")) dlog("basic info", `sudo ps -u -p ${pid}`);
     if (system || all) dlog("systemctl", `sudo systemctl status ${pid}`);
     if (directory || all) dlog("starting directory", `sudo pwdx ${pid}`);
     if (processes || all) dlog("process info (grep)", `sudo ps -auxwwf | grep ${pid}`);
