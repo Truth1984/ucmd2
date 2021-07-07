@@ -34,4 +34,6 @@ h.addEntry("file", "file related operations", {
     }
     if (size) return cmd(`sudo du -sh ${file}`);
     if (stat) return cmd(`stat ${file}`);
+    // default
+    if (file != ".") return cmd(`u file -p ${file}`);
   });
