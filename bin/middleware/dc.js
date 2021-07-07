@@ -39,7 +39,7 @@ h.addEntry("dc", "docker-compose command", {
     if (!un.fileExist("docker-compose.yml")) return cu.cmderr("docker-compose.yml doesn't exist", "dc");
     if (up) {
       if (!un.fileExist(".env")) cmd(`touch .env`);
-      return cmd(`sudo docker-compose --env-file ".env" up -d`);
+      return cmd(`sudo docker-compose --env-file .env up -d`);
     }
     if (down) return cmd("sudo docker-compose down --remove-orphans");
     if (images) return cmd("sudo docker-compose images");
