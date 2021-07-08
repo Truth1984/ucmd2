@@ -91,12 +91,12 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
       let target = u.len(users) > 1 ? await cu.multiSelect(users) : users[0];
       let invdata = un.ansibleInventoryData(target);
 
+      let remotePort = invdata.ansible_port;
+      let remoteUser = invdata.ansible_user;
+      let remoteHost = invdata.addr ? invdata.addr : target;
+
       return cmd(
-        `sudo docker run -d --name=${targetHost}sshNat${localPort} -v ${
-          process.env.HOME
-        }/.ssh:/root/.ssh:ro -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true -e SSH_ENABLE_ROOT_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${
-          invdata.ansible_port
-        } ${invdata.ansible_user}@${invdata.addr ? invdata.addr : target}`
+        `sudo docker run -d --name=${targetHost}sshNat${localPort} -v ${process.env.HOME}/.ssh:/root/.ssh:ro --health-cmd="nc -z -v ${remoteHost} ${targetPort}" --health-interval=30s --health-retries=2 -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true -e SSH_ENABLE_ROOT_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${remotePort} ${remoteUser}@${remoteHost}`
       );
     }
   });
