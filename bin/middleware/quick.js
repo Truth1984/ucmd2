@@ -39,7 +39,7 @@ h.addEntry("quick", "record command into quick folder", {
 
     let fullPath = un.filePathNormalize(quickPath, name[0]);
 
-    if (command) un.fileWriteSync(command, false, fullPath);
+    if (command) return un.fileWriteSync(command, false, fullPath);
 
     let qcmd = un.fileExist(fullPath)
       ? un.fileReadSync(fullPath)
