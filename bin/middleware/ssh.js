@@ -96,7 +96,7 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
       let remoteHost = invdata.addr ? invdata.addr : target;
 
       return cmd(
-        `sudo docker run -d --name=${targetHost}sshNat${localPort} -v ${process.env.HOME}/.ssh:/root/.ssh --health-cmd="nc -z -v ${remoteHost} ${targetPort}" --health-interval=30s --health-retries=2 -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true -e SSH_ENABLE_ROOT_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${remotePort} ${remoteUser}@${remoteHost}`
+        `sudo docker run -d --name=${targetHost}sshNat${localPort} -v ${process.env.HOME}/.ssh:/root/.ssh --health-cmd="nc -z -v ${remoteHost} ${targetPort}" --health-interval=30s --health-retries=2 -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true -e SSH_ENABLE_ROOT_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd:1.3.0 ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${remotePort} ${remoteUser}@${remoteHost}`
       );
     }
   });
