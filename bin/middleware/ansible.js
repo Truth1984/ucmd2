@@ -81,7 +81,7 @@ h.addEntry("ansible", "ansible related command", {
 
     if (script) {
       script = script[0];
-      if (un.fileExist(script)) return cu.cmderr("script doesn't exist", "ansible");
+      if (!un.fileExist(script)) return cu.cmderr("script doesn't exist", "ansible");
       let line = `${preconfig} ansible-playbook ${debug} -i ${ansibleInventoryLocation} -e apb_host=${name} -e apb_http_proxy=${proxy} -e apb_runtype=script -e apb_script='${un.filePathNormalize(
         script
       )}' ${ansiblePlaybookdir}`;
