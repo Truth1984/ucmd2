@@ -18,6 +18,8 @@ h.addEntry("k8s", "k8s common operations", { "-c,--convert": "convert k8s.gcr.io
       conv("kube-scheduler", cver);
       conv("kube-proxy", cver);
       conv("etcd", "3.4.9");
-      conv("pause", "3.5");
+      conv("pause", "3.4.1");
+      // coredns should not be used on master node
+      cmd(`sudo docker pull coredns/coredns`);
     }
   });
