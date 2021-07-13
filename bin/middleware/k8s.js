@@ -32,4 +32,6 @@ h.addEntry(
     }
 
     if (pod) return cmd(`sudo kubectl get po ${u.equal(pod, []) ? "-A" : pod[0]}`);
+
+    // let namespaces = cmd(`sudo kubelet `)
   });

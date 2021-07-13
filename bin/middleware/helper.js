@@ -123,6 +123,11 @@ h.addEntry("helper", "helper for other commands", {
       notify: {
         gnome: "notify-send 'data'",
       },
+      ip: {
+        change: 'modify /etc/sysconfig/network-scripts/ifcfg-en?,  add IPADDR= and change BOOTPROTO="static"',
+        gateway: "(router ip address), modify /etc/sysconfig/network, add NETWORKING=yes and GATEWAY=",
+        takeEffect: "service network restart",
+      },
       info: {
         script:
           `#!/bin/sh
