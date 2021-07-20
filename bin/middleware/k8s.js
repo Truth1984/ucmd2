@@ -4,12 +4,16 @@ h.addEntry("k8s", "k8s common operations", {
   "[1],-r,--resource": "get resource info, resource type: kubectl api-resources",
   "-d,--describe": "describe resource info",
   "-c,--convert": "convert k8s.gcr.io url and save it to local image, $accessable:ver, $tag:ver",
+  "-l,--log": "log target pot information, as $name, $line=100",
+  "-L,--loglive": "live log target pot as $name",
 })
   .addLink(
     { _: 0, args: "n", kwargs: "name" },
     { _: 1, args: "r", kwargs: "resource" },
     { args: "d", kwargs: "describe" },
-    { args: "c", kwargs: "convert" }
+    { args: "c", kwargs: "convert" },
+    { args: "l", kwargs: "log" },
+    { args: "L", kwargs: "loglive" }
   )
   .addAction(async (argv) => {
     let args = argv.args;
@@ -17,6 +21,8 @@ h.addEntry("k8s", "k8s common operations", {
     let resource = args.r;
     let describe = args.d;
     let convert = args.c;
+    let log = args.l;
+    let loglive = args.L;
 
     let dlog = (describe, line, grep) => {
       console.log("-----", describe, "-----");
@@ -51,7 +57,7 @@ h.addEntry("k8s", "k8s common operations", {
       return;
     }
 
-    // senario:
+    // scenario:
     // name + resource | get
     // name + resource | describe
     // name | get | select:resource
@@ -68,7 +74,7 @@ h.addEntry("k8s", "k8s common operations", {
     let nameWResourceGetter = (rcs, name) => resourceGetter(rcs).filter((item) => u.contains(item.NAME, name)); // may contain NAMESPACE
 
     if (pName && pResource) {
-      if (!pDescribe) return cmd(`kubectl get ${pResource} -A | grep ${pName}`);
+      if (!pDescribe) return cmd(`kubectl get ${pResource} -A  -o wide | grep ${pName}`);
       let pList = nameWResourceGetter(pResource, pName);
       let pTarget = {};
       if (u.len(pList) > 1) pTarget = await cu.multiSelect(u.arrayAdd("all", pList));
@@ -92,7 +98,7 @@ h.addEntry("k8s", "k8s common operations", {
     if (pName) {
       let commonResourceList = [
         "all",
-        // normal
+        // common
         "po",
         "deploy",
         "no",
@@ -110,22 +116,33 @@ h.addEntry("k8s", "k8s common operations", {
 
       let cResource = await cu.multiSelect(commonResourceList);
       if (cResource == "all") {
-        for (let i of u.arrayExtract(commonResourceList, 1)) dlog(i, `kubectl get ${i} -A | grep ${pName}`);
+        for (let i of u.arrayExtract(commonResourceList, 1)) dlog(i, `kubectl get ${i} -A -o wide | grep ${pName}`);
         return;
       }
 
-      let cResult = cu.shellParser(cmd(`kubectl get ${cResource} -A`, 0, 1));
+      let cResult = cu.shellParser(cmd(`kubectl get ${cResource} -A -o wide`, 0, 1));
       cResult = cResult.filter((item) => u.contains(item.NAME, pName));
       if (!(cResult && cResult[0] && cResult[0].NAME)) return console.log(cResult);
 
       let cWhole = await cu.multiSelect(cResult);
       let cName = cWhole.NAME;
-      let cNameSpace = cWhole.NAMESPACE ? `-n ${cWhole.NAMESPACE}` : pDescribe ? "" : "-A";
-      return cmd(`kubectl ${pDescribe ? "describe" : "get"} ${cResource} ${cName} ${cNameSpace}`);
+      let cNameSpace = cWhole.NAMESPACE ? `-n ${cWhole.NAMESPACE}` : "";
+      if (pDescribe) return cmd(`kubectl describe ${cResource} ${cName} ${cNameSpace}`);
+      return cmd(`kubectl get ${cResource} ${cName} ${cNameSpace ? cNameSpace : "-A"} -o wide`);
     }
 
     if (pResource) {
       if (pDescribe) return cmd(`kubectl describe ${pResource}`);
-      return cmd(`kubectl get ${pResource} -A`);
+      return cmd(`kubectl get ${pResource} -A -o wide`);
+    }
+
+    if (log || loglive) {
+      let target = log ? log : loglive;
+      let podName = target[0];
+      let podLine = target[1] ? target[1] : 100;
+      let podWhole = await cu.multiSelect(nameWResourceGetter("po", podName));
+      return cmd(
+        `kubectl logs ${podWhole.NAME} -n ${podWhole.NAMESPACE} --tail ${podLine} ${loglive ? "--follow" : ""}`
+      );
     }
   });
