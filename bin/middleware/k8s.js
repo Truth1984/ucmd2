@@ -110,7 +110,7 @@ h.addEntry("k8s", "k8s common operations", {
 
       let cResource = await cu.multiSelect(commonResourceList);
       if (cResource == "all") {
-        for (let i of u.arrayExtract(commonResourceList, 1)) dlog(i, `kubectl get ${i} | grep ${pName}`);
+        for (let i of u.arrayExtract(commonResourceList, 1)) dlog(i, `kubectl get ${i} -A | grep ${pName}`);
         return;
       }
 
@@ -120,7 +120,7 @@ h.addEntry("k8s", "k8s common operations", {
 
       let cWhole = await cu.multiSelect(cResult);
       let cName = cWhole.NAME;
-      let cNameSpace = cWhole.NAMESPACE ? `-n ${cWhole.NAMESPACE}` : "";
+      let cNameSpace = cWhole.NAMESPACE ? `-n ${cWhole.NAMESPACE}` : pDescribe ? "" : "-A";
       return cmd(`kubectl ${pDescribe ? "describe" : "get"} ${cResource} ${cName} ${cNameSpace}`);
     }
 
