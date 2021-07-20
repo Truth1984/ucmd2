@@ -115,10 +115,7 @@ h.addEntry("k8s", "k8s common operations", {
       ];
 
       let cResource = await cu.multiSelect(commonResourceList);
-      if (cResource == "all") {
-        for (let i of u.arrayExtract(commonResourceList, 1)) dlog(i, `kubectl get ${i} -A -o wide | grep ${pName}`);
-        return;
-      }
+      if (cResource == "all") return cmd(`kubectl get all -A -o wide`);
 
       let cResult = cu.shellParser(cmd(`kubectl get ${cResource} -A -o wide`, 0, 1));
       cResult = cResult.filter((item) => u.contains(item.NAME, pName));
