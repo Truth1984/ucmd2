@@ -114,8 +114,10 @@ h.addEntry("k8s", "k8s common operations", {
         "netpol",
       ];
 
+      if (pName == "all") return cmd(`kubectl get all -A -o wide`);
+
       let cResource = await cu.multiSelect(commonResourceList);
-      if (cResource == "all") return cmd(`kubectl get all -A -o wide`);
+      if (cResource == "all") return cmd(`kubectl get all -A -o wide | grep ${pName}`);
 
       let cResult = cu.shellParser(cmd(`kubectl get ${cResource} -A -o wide`, 0, 1));
       cResult = cResult.filter((item) => u.contains(item.NAME, pName));
