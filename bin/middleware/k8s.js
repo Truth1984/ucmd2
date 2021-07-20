@@ -6,6 +6,7 @@ h.addEntry("k8s", "k8s common operations", {
   "-c,--convert": "convert k8s.gcr.io url and save it to local image, $accessable:ver, $tag:ver",
   "-l,--log": "log target pot information, as $name, $line=100",
   "-L,--loglive": "live log target pot as $name",
+  "-i,--image": "get images and target pod",
 })
   .addLink(
     { _: 0, args: "n", kwargs: "name" },
@@ -13,7 +14,8 @@ h.addEntry("k8s", "k8s common operations", {
     { args: "d", kwargs: "describe" },
     { args: "c", kwargs: "convert" },
     { args: "l", kwargs: "log" },
-    { args: "L", kwargs: "loglive" }
+    { args: "L", kwargs: "loglive" },
+    { args: "i", kwargs: "image" }
   )
   .addAction(async (argv) => {
     let args = argv.args;
@@ -23,6 +25,7 @@ h.addEntry("k8s", "k8s common operations", {
     let convert = args.c;
     let log = args.l;
     let loglive = args.L;
+    let image = args.i;
 
     let dlog = (describe, line, grep) => {
       console.log("-----", describe, "-----");
@@ -144,4 +147,11 @@ h.addEntry("k8s", "k8s common operations", {
         `kubectl logs ${podWhole.NAME} -n ${podWhole.NAMESPACE} --tail ${podLine} ${loglive ? "--follow" : ""}`
       );
     }
+
+    if (image)
+      return cmd(
+        `kubectl get pods -o='custom-columns=PODS:.metadata.name,Images:.spec.containers[*].image' -A ${
+          u.len(image) > 0 ? "| grep " + image : ""
+        }`
+      );
   });
