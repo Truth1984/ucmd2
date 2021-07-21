@@ -95,6 +95,9 @@ h.addEntry("helper", "helper for other commands", {
         fullOutput: "2>&1",
         killProcessAfter: "timeout $xSec $cmd",
       },
+      bool: {
+        js: "if $(u eval true); then echo yes; fi;",
+      },
       ssh: {
         config: "nano /etc/ssh/sshd_config",
         restart: "u service -r=ssh",
