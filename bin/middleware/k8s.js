@@ -71,7 +71,7 @@ h.addEntry("k8s", "k8s common operations", {
     // resource | get
     // resource | describe
 
-    let nameResourceArr = u.arrayAdd(name, resource, describe);
+    let nameResourceArr = u.arrayAdd(name ? name : [], resource ? resource : [], describe);
     let pDescribe = !!describe;
     let pName = nameResourceArr[0];
     let pResource = nameResourceArr[1];
@@ -86,6 +86,7 @@ h.addEntry("k8s", "k8s common operations", {
       if (u.len(pList) > 1) pTarget = await cu.multiSelect(u.arrayAdd("all", pList));
       else pTarget = pList[0];
 
+      if (!pTarget) return cu.cmderr("Unable to find this name", "k8s-pTarget");
       if (pTarget == "all") {
         for (let i of pList)
           dlog(
