@@ -3,7 +3,7 @@ h.addEntry("replace", "replace a string in the file", {
   "[0],-f,--filename": "filename",
   "[1],-p,--pairs": "pairs, json data",
   "-h,--has": "has, check if file contains particular string",
-  "-g,--global": "global /g",
+  "-g,--global": "global /g, param for replace",
   "-t,--test": "test the result",
   "-R,--recursive": "recursive, param for replace",
 })
@@ -24,9 +24,12 @@ h.addEntry("replace", "replace a string in the file", {
     let test = args.t;
     let recursive = args.R;
 
+    filename = filename[0];
+    pairs = pairs[0];
+
     if (!un.fileExist(filename)) cu.cmderr("Error: file does not exist", "replace");
     let content = un.fileReadSync(filename);
-    if (has) return console.log(u.contains(content, has));
+    if (has) return console.log(u.contains(content, has[0]));
     let processed = u.stringReplace(content, cu.jsonParser(pairs), !!recursive, !!globals);
     if (test) return console.log(processed);
     return un.fileWriteSync(processed, false, filename);
