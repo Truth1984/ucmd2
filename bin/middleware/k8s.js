@@ -3,29 +3,32 @@ h.addEntry("k8s", "k8s common operations", {
   "[0],-n,--name": "name to find or use",
   "[1],-r,--resource": "get resource info, resource type: kubectl api-resources",
   "-d,--describe": "describe resource info",
-  "-c,--convert": "convert k8s.gcr.io url and save it to local image, $accessable:ver, $tag:ver",
+  "-C,--convert": "convert k8s.gcr.io url and save it to local image, $accessable:ver, $tag:ver",
   "-l,--log": "log target pot information, as $name, $line=100",
   "-L,--loglive": "live log target pot as $name",
   "-i,--image": "get images and target pod",
+  "-a,--apply": "apply or create -f yaml file",
 })
   .addLink(
     { _: 0, args: "n", kwargs: "name" },
     { _: 1, args: "r", kwargs: "resource" },
     { args: "d", kwargs: "describe" },
-    { args: "c", kwargs: "convert" },
+    { args: "C", kwargs: "convert" },
     { args: "l", kwargs: "log" },
     { args: "L", kwargs: "loglive" },
-    { args: "i", kwargs: "image" }
+    { args: "i", kwargs: "image" },
+    { args: "a", kwargs: "apply" }
   )
   .addAction(async (argv) => {
     let args = argv.args;
     let name = args.n;
     let resource = args.r;
     let describe = args.d;
-    let convert = args.c;
+    let convert = args.C;
     let log = args.l;
     let loglive = args.L;
     let image = args.i;
+    let apply = args.a;
 
     let dlog = (describe, line, grep) => {
       console.log("-----", describe, "-----");
@@ -86,12 +89,12 @@ h.addEntry("k8s", "k8s common operations", {
       if (pTarget == "all") {
         for (let i of pList)
           dlog(
-            i.NAME + i.NAMESPACE ? " " + i.NAMESPACE : "",
+            i.NAME + (i.NAMESPACE ? " " + i.NAMESPACE : ""),
             `kubectl describe ${pResource} ${i.NAME} ${i.NAMESPACE ? "-n " + i.NAMESPACE : ""}`
           );
       } else {
         dlog(
-          pTarget.NAME + pTarget.NAMESPACE ? " " + pTarget.NAMESPACE : "",
+          pTarget.NAME + (pTarget.NAMESPACE ? " " + pTarget.NAMESPACE : ""),
           `kubectl describe ${pResource} ${pTarget.NAME} ${pTarget.NAMESPACE ? "-n " + pTarget.NAMESPACE : ""}`
         );
       }
@@ -154,4 +157,6 @@ h.addEntry("k8s", "k8s common operations", {
           u.len(image) > 0 ? "| grep " + image : ""
         }`
       );
+
+    if (apply) return cmd(`kubectl apply -f ${apply}`);
   });
