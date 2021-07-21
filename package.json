@@ -4,7 +4,7 @@
   "description": "",
   "main": "./bin/index.js",
   "scripts": {
-    "build": "npm remove -g ucmd2 && npm i && npm i -g . && sudo ln -s $(command -v u) /usr/bin/u"
+    "build": "npm remove -g ucmd2 && npm i && sudo rm -rf $(npm config get prefix)/bin/u && sudo rm -rf /usr/bin/u && npm i -g . && sudo ln -s $(command -v u) /usr/bin/u"
   },
   "repository": {
     "type": "git",
