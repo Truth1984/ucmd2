@@ -71,10 +71,9 @@ h.addEntry("k8s", "k8s common operations", {
     // resource | get
     // resource | describe
 
-    let nameResourceArr = u.arrayAdd(name ? name : [], resource ? resource : [], describe);
     let pDescribe = !!describe;
-    let pName = nameResourceArr[0];
-    let pResource = nameResourceArr[1];
+    let pName = name ? name[0] : describe[0];
+    let pResource = resource ? resource[0] : describe[0];
 
     let resourceGetter = (rcs) => cu.shellParser(cmd(`kubectl get ${rcs} -A`, 0, 1));
     let nameWResourceGetter = (rcs, name) => resourceGetter(rcs).filter((item) => u.contains(item.NAME, name)); // may contain NAMESPACE
