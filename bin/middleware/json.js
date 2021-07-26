@@ -28,7 +28,7 @@ h.addEntry("json", "parse result to json", {
 
     if (file) json = cu.jsonParser(un.fileReadSync(file[0]));
     if (parse) json = cu.jsonParser(parse[0]);
-    if (command) json = cu.jsonParser(cmd(command, 0, 1));
+    if (command) json = cu.jsonParser(cmd(command[0], 0, 1));
     if (shell) {
       let option = {};
       for (let i of shell) option = u.mapMerge(option, cu.jsonParser(i));

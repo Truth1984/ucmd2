@@ -42,7 +42,7 @@ h.addEntry("k8s", "k8s common operations", {
           `sudo docker pull k8smx/${name}:${ver} && sudo docker tag k8smx/${name}:${ver} k8s.gcr.io/${name}:${ver} && sudo docker rmi k8smx/${name}:${ver}`
         );
 
-      let cver = "v1.21.2";
+      let cver = cmd(`u json -c 'kubectl version -o json' -e "json.GitVersion"`, 0, 1);
 
       conv("kube-apiserver", cver);
       conv("kube-controller-manager", cver);
