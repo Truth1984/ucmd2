@@ -28,13 +28,13 @@ h.addEntry("json", "parse result to json", {
 
     if (file) json = cu.jsonParser(un.fileReadSync(file[0]));
     if (parse) json = cu.jsonParser(parse[0]);
-
+    if (command) json = cu.jsonParser(cmd(command, 0, 1));
     if (shell) {
-      let result = cmd(command, 0, 1);
       let option = {};
       for (let i of shell) option = u.mapMerge(option, cu.jsonParser(i));
-      json = cu.shellParser(result, option);
+      json = cu.shellParser(json, option);
     }
+
     if (evals) return console.log(eval("(" + evals[0] + ")"));
     if (stringify) return console.log(u.jsonToString(json, ""));
     console.log(json);
