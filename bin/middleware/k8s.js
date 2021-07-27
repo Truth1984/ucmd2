@@ -43,6 +43,12 @@ h.addEntry("k8s", "k8s common operations", {
           `sudo docker pull k8smx/${name}:${ver} && sudo docker tag k8smx/${name}:${ver} k8s.gcr.io/${name}:${ver} && sudo docker rmi k8smx/${name}:${ver}`
         );
 
+      if (convert[0] && convert[1])
+        return cmd(
+          `sudo docker pull ${convert[0]} && sudo docker tag ${convert[0]} ${convert[1]} && sudo docker rmi ${convert[0]}`,
+          1
+        );
+
       let cverTarget = "clientVersion";
       if (convert[0] && convert[0] == "server") cverTarget = "serverVersion";
       let cver = cmd(`u json -c 'kubectl version -o json' -e "json.${cverTarget}.GitVersion"`, 0, 1);
@@ -58,11 +64,6 @@ h.addEntry("k8s", "k8s common operations", {
         `sudo docker pull coredns/coredns:1.8.0 && sudo docker tag coredns/coredns:1.8.0 k8s.gcr.io/coredns/coredns:v1.8.0 && sudo docker rmi coredns/coredns:1.8.0`
       );
 
-      if (convert[0] && convert[1])
-        return cmd(
-          `sudo docker pull ${convert[0]} && sudo docker tag ${convert[0]} ${convert[1]} && sudo docker rmi ${convert[0]}`,
-          1
-        );
       return;
     }
 
