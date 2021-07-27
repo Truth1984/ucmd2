@@ -3,7 +3,8 @@ h.addEntry("k8s", "k8s common operations", {
   "[0],-n,--name": "name to find or use",
   "[1],-r,--resource": "get resource info, resource type: kubectl api-resources",
   "-d,--describe": "describe resource info",
-  "-C,--convert": "convert k8s.gcr.io url and save it to local image, $accessable:ver, $tag:ver",
+  "-C,--convert":
+    "convert k8s.gcr.io url and save it to local image, can be [ 'client' / 'server' ] | [ $accessable:ver , $tag:ver ]",
   "-l,--log": "log target pot information, as $name, $line=100",
   "-L,--loglive": "live log target pot as $name",
   "-i,--image": "get images and target pod",
@@ -42,7 +43,9 @@ h.addEntry("k8s", "k8s common operations", {
           `sudo docker pull k8smx/${name}:${ver} && sudo docker tag k8smx/${name}:${ver} k8s.gcr.io/${name}:${ver} && sudo docker rmi k8smx/${name}:${ver}`
         );
 
-      let cver = cmd(`u json -c 'kubectl version -o json' -e "json.GitVersion"`, 0, 1);
+      let cverTarget = "clientVersion";
+      if (convert[0] && convert[0] == "server") cverTarget = "serverVersion";
+      let cver = cmd(`u json -c 'kubectl version -o json' -e "json.${cverTarget}.GitVersion"`, 0, 1);
 
       conv("kube-apiserver", cver);
       conv("kube-controller-manager", cver);
