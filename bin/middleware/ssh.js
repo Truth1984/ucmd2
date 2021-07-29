@@ -96,7 +96,7 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
       let remoteHost = invdata.addr ? invdata.addr : target;
 
       return cmd(
-        `sudo docker run -d --name=${targetHost}sshNat${localPort} -v ${process.env.HOME}/.ssh:/root/.ssh --health-cmd="curl -f --retry 3 --max-time 5 --retry-delay 10 --retry-max-time 60 'http://${remoteHost}:${targetPort}' || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'" --health-interval=1m --health-timeout=2m -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true -e SSH_ENABLE_ROOT_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd:1.3.0 ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${remotePort} ${remoteUser}@${remoteHost}`
+        `sudo docker run -d --name=${targetHost}sshNat${localPort} -v ${process.env.HOME}/.ssh:/root/.ssh --health-cmd="nc -z -v -w 3 ${remoteHost} ${targetPort} &> /dev/null && echo 'online' || exit 1" --health-interval=30s --health-timeout=30s -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true -e SSH_ENABLE_ROOT_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd:1.3.0 ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${remotePort} ${remoteUser}@${remoteHost}`
       );
     }
   });
