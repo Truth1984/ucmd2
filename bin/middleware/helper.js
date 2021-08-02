@@ -98,6 +98,9 @@ h.addEntry("helper", "helper for other commands", {
       bool: {
         js: "if $(u eval true); then echo yes; fi;",
       },
+      tools: {
+        subdomain: "https://geekflare.com/find-subdomains/",
+      },
       ssh: {
         config: "nano /etc/ssh/sshd_config",
         restart: "u service -r=ssh",
