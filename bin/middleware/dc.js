@@ -2,6 +2,7 @@ const { h, cmd, u, cu, un } = require("../head");
 h.addEntry("dc", "docker-compose command", {
   "-u,--up": "up, detached mode",
   "-d,--down": "down, and remove orphan",
+  "-D,--debug": "up, debug mode",
   "-i,--images": "images display",
   "-b,--build": "build image",
   "-p,--process": "process list AKA containter",
@@ -14,6 +15,7 @@ h.addEntry("dc", "docker-compose command", {
   .addLink(
     { args: "u", kwargs: "up" },
     { args: "d", kwargs: "down" },
+    { args: "D", kwargs: "debug" },
     { args: "i", kwargs: "images" },
     { args: "b", kwargs: "build" },
     { args: "p", kwargs: "process" },
@@ -27,6 +29,7 @@ h.addEntry("dc", "docker-compose command", {
     let args = argv.args;
     let up = args.u;
     let down = args.d;
+    let debug = args.D;
     let images = args.i;
     let build = args.b;
     let processes = args.p;
@@ -37,9 +40,10 @@ h.addEntry("dc", "docker-compose command", {
     let log = args.l;
 
     if (!un.fileExist("docker-compose.yml")) return cu.cmderr("docker-compose.yml doesn't exist", "dc");
-    if (up) {
+    if (up || debug) {
       if (!un.fileExist(".env")) cmd(`touch .env`);
-      return cmd(`sudo docker-compose --env-file .env up -d`);
+      let line = debug ? "--log-level DEBUG" : "";
+      return cmd(`sudo docker-compose ${line} --env-file .env up -d`);
     }
     if (down) return cmd("sudo docker-compose down --remove-orphans");
     if (images) return cmd("sudo docker-compose images");
