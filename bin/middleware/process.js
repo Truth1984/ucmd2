@@ -48,7 +48,7 @@ h.addEntry("process", "show list of current process", {
     if (detailed) return cmd(`sudo lsof -p ${detailed}`);
     if (docker) {
       if (u.len(docker) == 0) return cmd(`sudo docker stats --all`);
-      let id = cmd(`u docker -G ${docker[0]}`);
+      let id = cmd(`u docker -G ${docker[0]}`, 0, 1);
       if (id) return cmd(`sudo docker stats ${id}`);
     }
     return cmd(base);
