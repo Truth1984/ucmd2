@@ -8,6 +8,7 @@ h.addEntry("process", "show list of current process", {
   "-K,--kill": "kill relevant process",
   "-d,--directory": "directory of running process, require pid",
   "-D,--detailed": "detailed directory or file system of target process, require pid",
+  "-c,--container,--docker": "docker container stats",
 })
   .addLink(
     { _: 0, args: "n", kwargs: "name" },
@@ -17,7 +18,9 @@ h.addEntry("process", "show list of current process", {
     { args: "l", kwargs: "log" },
     { args: "K", kwargs: "kill" },
     { args: "d", kwargs: "directory" },
-    { args: "D", kwargs: "detailed" }
+    { args: "D", kwargs: "detailed" },
+    { args: "c", kwargs: "container" },
+    { args: "c", kwargs: "docker" }
   )
   .addAction((argv) => {
     let args = argv.args;
@@ -29,6 +32,7 @@ h.addEntry("process", "show list of current process", {
     let kill = args.K;
     let directory = args.d;
     let detailed = args.D;
+    let docker = args.c;
 
     let base = "ps -aux";
     if (full) base += "wwf";
@@ -42,5 +46,10 @@ h.addEntry("process", "show list of current process", {
     }
     if (directory) return cmd(`sudo pwdx ${directory}`);
     if (detailed) return cmd(`sudo lsof -p ${detailed}`);
+    if (docker) {
+      if (u.len(docker) == 0) return cmd(`sudo docker stats --all`);
+      let id = cmd(`u docker -G ${docker[0]}`);
+      if (id) return cmd(`sudo docker stats ${id}`);
+    }
     return cmd(base);
   });

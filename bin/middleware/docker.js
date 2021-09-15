@@ -5,6 +5,7 @@ h.addEntry("docker", "docker additional command", {
   "-b,--build": "build dockerfile with result name, as [$targetName:version,$sourcefile]",
   "-s,--stop": "stop the container",
   "-S,--start": "start the container",
+  "-G,--get": "get container id from segment, as [$name,$ps=true,$img=false]",
 
   "-r,--remove": "remove container",
   "-R,--removefull": "remove container and its volume",
@@ -29,6 +30,7 @@ h.addEntry("docker", "docker additional command", {
     { args: "b", kwargs: "build" },
     { $: 0, args: "s", kwargs: "stop" },
     { $: 0, args: "S", kwargs: "start" },
+    { $: 0, args: "G", kwargs: "get" },
 
     { $: 0, args: "r", kwargs: "remove" },
     { $: 0, args: "R", kwargs: "removefull" },
@@ -55,6 +57,7 @@ h.addEntry("docker", "docker additional command", {
     let build = args.b;
     let stop = args.s;
     let start = args.S;
+    let get = args.G;
 
     let remove = args.r;
     let removefull = args.R;
@@ -135,6 +138,7 @@ h.addEntry("docker", "docker additional command", {
 
       if (stop) return cmd(`sudo docker container stop ` + (await fuzzy(target, true)).id);
       if (start) return cmd(`sudo docker container start ` + (await fuzzy(target, true)).id);
+      if (get) return fuzzy(get[0], get[1] == undefined ? true : get[1], get[2]).then((item) => console.log(item.id));
       if (restart) return cmd(`sudo docker container restart ` + (await fuzzy(target, true)).id);
       if (execute) {
         if (u.equal(execute, [])) execute = ["/bin/sh"];
