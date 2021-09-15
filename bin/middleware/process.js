@@ -46,10 +46,6 @@ h.addEntry("process", "show list of current process", {
     }
     if (directory) return cmd(`sudo pwdx ${directory}`);
     if (detailed) return cmd(`sudo lsof -p ${detailed}`);
-    if (docker) {
-      if (u.len(docker) == 0) return cmd(`sudo docker stats --all`);
-      let id = cmd(`u docker -G ${docker[0]}`, 0, 1);
-      if (id) return cmd(`sudo docker stats ${id}`);
-    }
+    if (docker) return cmd(`sudo docker stats --all`);
     return cmd(base);
   });
