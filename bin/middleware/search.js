@@ -63,8 +63,8 @@ h.addEntry("search", "find the file name in target location, basedir default to 
     if (evals) {
       result = result.filter((i) => {
         let { mtime } = un.fileStat(i.fullPath);
-        if (u.equal(evals[0], {})) evals[0] = { year: -100 };
-        if (!evals[1] || u.equal(evals[1], {})) evals[1] = { year: 100 };
+        if (u.equal(evals[0], {})) evals[0] = "{ year: -100 }";
+        if (!evals[1] || u.equal(evals[1], {})) evals[1] = "{ year: 100 }";
         return u.dateAdd(cu.jsonParser(evals[0])) < mtime && mtime < u.dateAdd(cu.jsonParser(evals[1]));
       });
     }
