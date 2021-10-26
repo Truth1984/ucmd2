@@ -18,7 +18,7 @@ h.addEntry("gitclone", "git clone into current folder", {
     let name = args.n;
     let username = args.u ? args.u : "Truth1984";
     let dockerize = args.D;
-    let destination = args.d ? args.d : `~/Documents/${name}`;
+    let destination = args.d ? args.d : `$HOME/Documents/${name}`;
     let initialize = args.i;
 
     let asset = un.filePathNormalize(__dirname, "../../assets/gitfile");
