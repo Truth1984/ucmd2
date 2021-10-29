@@ -5,6 +5,8 @@ h.addEntry("user", "user related operation", {
   "-G,--groupadd": "add group, define [$groupname, $?groupid], groupid starting from 1000",
   "-a,--add": "add user, define [$username,$?password,$?groupname,$?groupid]",
   "-A,--adduser": "add user to group, define [$user,$group]",
+  "-s,--simpleadd": "add plain user, define [$username, $?groupid]",
+  "-S,--simpleadddocker": "add plain user to docker group, define [$username]",
   "-r,--remove": "remove user from the group, define [$user,$group]",
   "-R,--removeuser": "remove user from system",
 })
@@ -13,6 +15,8 @@ h.addEntry("user", "user related operation", {
     { args: "G", kwargs: "groupadd" },
     { args: "a", kwargs: "add" },
     { args: "A", kwargs: "adduser" },
+    { args: "s", kwargs: "simpleadd" },
+    { args: "S", kwargs: "simpleadddocker" },
     { args: "r", kwargs: "remove" },
     { args: "R", kwargs: "removeuser" }
   )
@@ -22,6 +26,8 @@ h.addEntry("user", "user related operation", {
     let groupadd = args.G;
     let add = args.a;
     let adduser = args.A;
+    let simpleadd = args.s;
+    let simpleadddocker = args.S;
     let remove = args.r;
     let removeuser = args.R;
 
@@ -36,6 +42,7 @@ h.addEntry("user", "user related operation", {
       if (!groupname) return cu.cmderr("groupname not defined", "user userToGroup");
       return cmd(`sudo usermod -a -G ${groupname} ${username}`);
     };
+    let osChecker = (name) => cmd(`u os ${name}`, 0, 1) == "true";
 
     if (groupadd) {
       let groupname = groupadd[0];
@@ -50,11 +57,29 @@ h.addEntry("user", "user related operation", {
       let groupname = add[2];
       let groupid = add[3];
       if (!username) return cu.cmderr("username not defined", "user --add");
-      cmd(`sudo adduser ${username}`);
+      let opt = ``;
+      if (osChecker("ubuntu")) opt = `--gecos "" --disabled-password`;
+      cmd(`sudo adduser ${opt} ${username}`);
       if (password) cmd(`echo '${username}:${password}' | chpasswd`);
 
       if (groupname) groupIniter(groupname, groupid);
       if (groupname) userToGroup(username, groupname);
+    }
+
+    if (simpleadd) {
+      let username = add[0];
+      if (!username) return cu.cmderr("username not defined", "user --simpleadd");
+      let opt = ``;
+      if (osChecker("ubuntu")) opt = `--gecos "" --disabled-password`;
+      cmd(`sudo adduser ${opt} --system --no-create-home ${username}`);
+    }
+
+    if (simpleadddocker) {
+      let username = add[0];
+      if (!username) return cu.cmderr("username not defined", "user --simpleadd");
+      let opt = ``;
+      if (osChecker("ubuntu")) opt = `--gecos "" --disabled-password`;
+      cmd(`sudo adduser ${opt} --gid 1000 --system --no-create-home ${username}`);
     }
 
     if (adduser) {
