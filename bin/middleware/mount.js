@@ -1,11 +1,15 @@
 const { h, cmd, u, un, cu } = require("../head");
-h.addEntry("mount", "mount or unmount a device, use `mkfs.ext4 /dev/target` to change type", {
-  "-m,--mount": "mount target dynamically, may change name to /dev/$name",
-  "-M,--mounthard": "mount directly to target directory, require [$device, $directory]",
-  "-u,--unmount": "unmount target",
-  "[0],-i,--mountinfo": "information of mounting device",
-  "-I,--unmountinfo": "unmounted information of device",
-})
+h.addEntry(
+  "mount",
+  "mount or unmount a device, use `mkfs.ext4 /dev/target` to change type, change access to 0755 to use docker",
+  {
+    "-m,--mount": "mount target dynamically, may change name to /dev/$name",
+    "-M,--mounthard": "mount directly to target directory, require [$device, $directory]",
+    "-u,--unmount": "unmount target",
+    "[0],-i,--mountinfo": "information of mounting device",
+    "-I,--unmountinfo": "unmounted information of device",
+  }
+)
   .addLink(
     { args: "m", kwargs: "mount" },
     { args: "M", kwargs: "mounthard" },
