@@ -67,7 +67,7 @@ h.addEntry("user", "user related operation", {
     }
 
     if (simpleadd) {
-      let username = add[0];
+      let username = simpleadd[0];
       if (!username) return cu.cmderr("username not defined", "user --simpleadd");
       let opt = ``;
       if (osChecker("ubuntu")) opt = `--gecos "" --disabled-password`;
@@ -75,7 +75,7 @@ h.addEntry("user", "user related operation", {
     }
 
     if (simpleadddocker) {
-      let username = add[0];
+      let username = simpleadddocker[0];
       if (!username) return cu.cmderr("username not defined", "user --simpleadd");
       let opt = ``;
       if (osChecker("ubuntu")) opt = `--gecos "" --disabled-password`;
