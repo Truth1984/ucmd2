@@ -20,7 +20,7 @@ h.addEntry("nat", "nat traversal, --setup on client", {
     if (serversetup) {
       if (un.cmdCheckStatus(`id ussh`)) {
         cmd(`nano /home/ussh/.ssh/authorized_keys`);
-        return cmd(`sudo service ssh restart`);
+        return cmd(`sudo service sshd restart`);
       }
       let opt = ``;
       if (osChecker("ubuntu")) opt = `--gecos "" --disabled-password`;
@@ -34,7 +34,7 @@ h.addEntry("nat", "nat traversal, --setup on client", {
   X11Forwarding no
   AllowTcpForwarding no
   GatewayPorts yes' >> /etc/ssh/sshd_config`);
-      cmd(`sudo service ssh restart`);
+      cmd(`sudo service sshd restart`);
     }
 
     if (clientsetup) {
