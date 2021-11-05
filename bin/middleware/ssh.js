@@ -6,10 +6,6 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
   "-l,--list": "list each ip in details with ansible",
   "-p,--proxy": "proxy socks5 to [$host,$localport=15542]",
   "-r,--refresh": "refresh keygen token",
-  "-n,--nat":
-    "nat traversal,[$targetHost, $targetPort, $localPort, $localHost=localhost(can be local ip)]\n" +
-    "\t\t\tforward request from localHost:localPort to targetHost:targetPort\n" +
-    "\t\t\tmodify server config: 1. nano /etc/ssh/sshd_config 2. `GatewayPorts yes` 3. restart sshd service",
 })
   .addLink(
     { _: 0, args: "c", kwargs: "connect" },
@@ -17,8 +13,7 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
     { args: "t", kwargs: "transfer" },
     { args: "l", kwargs: "list" },
     { args: "p", kwargs: "proxy" },
-    { args: "r", kwargs: "refresh" },
-    { args: "n", kwargs: "nat" }
+    { args: "r", kwargs: "refresh" }
   )
   .addAction(async (argv) => {
     let args = argv.args;
@@ -76,29 +71,5 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
         invdata.addr ? invdata.addr : target
       }`;
       return cmd(`u screen -c '${line}' -n 'sshproxy${localPort}' `);
-    }
-
-    if (nat) {
-      let targetHost = nat[0];
-      let targetPort = nat[1];
-      let localPort = nat[2];
-      let localHost = nat[3];
-      if (!targetHost || !targetPort || !localPort)
-        return cu.cmderr("$targetHostPattern, $targetPort, $localPort, $localHost? undefined", "nat");
-      if (!localHost) localHost = "host.docker.internal";
-
-      let users = un.ansibleUserList(targetHost);
-      let target = u.len(users) > 1 ? await cu.multiSelect(users) : users[0];
-      let invdata = un.ansibleInventoryData(target);
-
-      let remotePort = invdata.ansible_port;
-      let remoteUser = invdata.ansible_user;
-      let remoteHost = invdata.addr ? invdata.addr : target;
-
-      cmd("if ! sudo docker ps | grep -q autoheal ; then echo -- autoheal not deployed --; fi;");
-
-      return cmd(
-        `sudo docker run -d --name=${targetHost}sshNat${localPort} -v ${process.env.HOME}/.ssh:/root/.ssh --health-cmd="nc -z -v -w 3 ${remoteHost} ${targetPort} &> /dev/null && echo 'online' || exit 1" --health-interval=30s --health-timeout=30s -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true -e SSH_ENABLE_ROOT_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd:1.3.0 ssh -N -R ${targetPort}:${localHost}:${localPort} -p ${remotePort} ${remoteUser}@${remoteHost}`
-      );
     }
   });
