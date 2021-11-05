@@ -30,7 +30,6 @@ h.addEntry("nat", "nat traversal, --setup on client", {
       cmd(`sudo chown -R ussh:ussh /home/ussh/.ssh`);
       cmd(`nano /home/ussh/.ssh/authorized_keys`);
       cmd(`echo 'Match User ussh
-  Port 13288
   PasswordAuthentication no
   X11Forwarding no
   AllowTcpForwarding no
