@@ -191,6 +191,8 @@ un.ansibleInventoryData = (pattern = "all") => {
   };
 };
 
+un.cmdCheckStatus = (line) => cmd(line, 0, 1, 1).status == 0;
+
 let yargs = new yargslite();
 let h = new Helpdoc("u", "Author: Awada.Z");
 module.exports = { yargs, h, cmd, cu, u, un };
