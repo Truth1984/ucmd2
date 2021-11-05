@@ -28,13 +28,14 @@ h.addEntry("nat", "nat traversal, --setup on client", {
       cmd(`mkdir /home/ussh/.ssh`);
       cmd(`echo "# enter your public key" > /home/ussh/.ssh/authorized_keys`);
       cmd(`sudo chown -R ussh:ussh /home/ussh/.ssh`);
+      cmd(`nano /home/ussh/.ssh/authorized_keys`);
       cmd(`echo 'Match User ussh
   Port 13288
   PasswordAuthentication no
   X11Forwarding no
   AllowTcpForwarding no
   GatewayPorts yes' >> /etc/ssh/sshd_config`);
-      cmd(`sudo service sshd restart`);
+      return cmd(`sudo service sshd restart`);
     }
 
     if (clientsetup) {
