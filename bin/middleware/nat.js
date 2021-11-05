@@ -40,7 +40,7 @@ h.addEntry("nat", "nat traversal, --setup on client", {
       cmd("if ! sudo docker ps | grep -q autoheal ; then echo -- autoheal not deployed --; fi;");
 
       return cmd(
-        `sudo docker run -d --name=${targetHostName}sshNat${localPort} -v ${process.env.HOME}/.ssh:/root/.ssh --health-cmd="nc -z -v -w 3 ${remoteHost} ${targetPort} &> /dev/null && echo 'online' || exit 1" --health-interval=30s --health-timeout=30s -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=true -e SSH_ENABLE_ROOT_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd:1.3.0 ssh -i /root/.ssh/id_rsa_ussh -N -R ${targetPort}:${localHost}:${localPort} -p ${remotePort} ${remoteUser}@${remoteHost}`
+        `sudo docker run -d --name=${targetHostName}sshNat${localPort} -v ${process.env.HOME}/.ssh:/root/.ssh --health-cmd="nc -z -v -w 3 ${remoteHost} ${targetPort} &> /dev/null && echo 'online' || exit 1" --health-interval=30s --health-timeout=30s -e GATEWAY_PORTS=true -e SSH_ENABLE_ROOT=true -e SSH_ENABLE_PASSWORD_AUTH=false -e SSH_ENABLE_ROOT_PASSWORD_AUTH=true --add-host=host.docker.internal:host-gateway --restart=always panubo/sshd:1.3.0 ssh -i /root/.ssh/id_rsa_ussh -N -R ${targetPort}:${localHost}:${localPort} -p ${remotePort} -vvv ${remoteUser}@${remoteHost}`
       );
     }
 
@@ -59,7 +59,7 @@ h.addEntry("nat", "nat traversal, --setup on client", {
       cmd(`echo 'Match User ussh
   PasswordAuthentication no
   X11Forwarding no
-  AllowTcpForwarding no
+  AllowTcpForwarding yes
   GatewayPorts yes' >> /etc/ssh/sshd_config`);
       return cmd(`sudo service sshd restart`);
     }
