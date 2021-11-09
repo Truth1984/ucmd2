@@ -1,8 +1,8 @@
 const { h, u, cu } = require("../head");
 h.addEntry("post", "send post request", {
   "[0],-u,--url": "url",
-  "[1],-h,--headers": "headers",
-  "-d,--json": "json data",
+  "[1],-d,--json": "json data",
+  "-h,--headers": "headers",
   "-g,--get": "get request",
 })
   .addLink(
@@ -22,5 +22,5 @@ h.addEntry("post", "send post request", {
     let get = args.g;
 
     if (get) return u.promiseFetchGet(url, headers);
-    return u.promiseFetchPost(url, data, headers);
+    return u.promiseFetchPost(url, data, headers).catch((e) => console.log(e));
   });
