@@ -21,6 +21,6 @@ h.addEntry("post", "send post request", {
     if (args.h) for (let i of args.h) headers = u.mapMerge(headers, cu.jsonParser(i));
     let get = args.g;
 
-    if (get) return u.promiseFetchGet(url, headers);
-    return u.promiseFetchPost(url, data, headers).catch((e) => console.log(e));
+    if (get) return u.promiseFetchGet(url, headers, {}, 0).then(console.log).catch(console.log);
+    return u.promiseFetchPost(url, data, headers, {}, 0).then(console.log).catch(console.log);
   });
