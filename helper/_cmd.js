@@ -1,7 +1,7 @@
 const { spawnSync } = require("child_process");
 
 module.exports = (scripts, log, returnable = false, full = false) => {
-  if (log || process.env.UDEBUG) console.log(scripts);
+  if (log || process.env.UDEBUG || process.env.udebug) console.log(scripts);
   let cmdarray = scripts.split(" ");
   return full
     ? spawnSync(cmdarray.shift(), cmdarray, {
