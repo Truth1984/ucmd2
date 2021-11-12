@@ -21,20 +21,20 @@ h.addEntry("install", "install or upgrade command on different platform", {
     if (name) {
       if (platform == "apt") return cmd(`sudo apt-get install -y ${name}`);
       if (platform == "yum") return cmd(`sudo yum install -y ${name}`);
-      if (platform == "brew") return cmd(`sudo brew install -y ${name}`);
+      if (platform == "brew") return cmd(`brew install -y ${name}`);
       if (platform == "choco") return cmd(`choco install -y ${name}`);
     }
 
     if (list) {
       if (platform == "apt") return cmd(`sudo apt list --installed`);
       if (platform == "yum") return cmd(`sudo yum list installed`);
-      if (platform == "brew") return cmd(`sudo brew list`);
+      if (platform == "brew") return cmd(`brew list`);
       if (platform == "choco") return cmd(`choco list -li`);
     }
 
     if (clean) {
       if (platform == "apt") return cmd(`sudo apt-get clean`);
       if (platform == "yum") return cmd(`sudo yum clean all`);
-      if (platform == "brew") return cmd(`sudo brew cleanup`);
+      if (platform == "brew") return cmd(`brew cleanup`);
     }
   });
