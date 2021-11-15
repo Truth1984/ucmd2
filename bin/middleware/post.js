@@ -1,7 +1,7 @@
 const { h, u, cu } = require("../head");
 h.addEntry("post", "send post request", {
   "[0],-u,--url": "url",
-  "[1],-d,--json": "json data",
+  "[1],-d,--data": "json data",
   "-h,--headers": "headers",
   "-g,--get": "get request",
 })
