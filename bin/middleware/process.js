@@ -1,4 +1,5 @@
 const { h, cmd, u, cu } = require("../head");
+const os = require("os");
 h.addEntry("process", "show list of current process", {
   "[0],-n,--name": "name to grep",
   "-f,--full": "full command display",
@@ -36,6 +37,7 @@ h.addEntry("process", "show list of current process", {
 
     let base = "ps -aux";
     if (full) base += "wwf";
+    if (os.platform() == "darwin") base = "ps aux";
     if (name) return cmd(base + " | grep " + name);
     if (sortcpu) return cmd(`ps auxk -%cpu,%mem | head -n${u.equal(sortcpu, []) ? 10 : sortcpu}`);
     if (sortmem) return cmd(`ps auxk -%mem,%cpu | head -n${u.equal(sortmem, []) ? 10 : sortmem}`);

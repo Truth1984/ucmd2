@@ -28,6 +28,12 @@ h.addEntry("port", "scan for a specific port", {
       else return cmd(`sudo docker ps | grep ${docker}`);
     }
 
+    if (os.platform() == "darwin") {
+      let line = `netstat -Watnlv | grep LISTEN | awk '{"ps -o comm= -p " $9 | getline procname; print cred "proto: " $1 " | addr.port: "$4 " | pid: "$9 " | name: " procname;  }' | column -t -s "|"`;
+      if (!port) return cmd(line);
+      return cmd(line + " | grep " + port);
+    }
+
     if (connection) return cmd(`sudo lsof -i :${connection}`);
 
     if (!port) return cmd("sudo netstat -plntu");

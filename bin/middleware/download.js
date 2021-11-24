@@ -66,8 +66,8 @@ h.addEntry("download", "download file from internet", {
     };
 
     let args = argv.args;
-    let url = args.u;
-    let filename = args.f ? args.f : un.filePathNormalize(url.substring(url.lastIndexOf("/")));
+    let url = args.u[0];
+    let filename = args.f ? args.f[0] : un.filePathNormalize(url.substring(url.lastIndexOf("/")));
     let absolute = args.a;
     let wget = args.w;
 

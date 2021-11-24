@@ -21,7 +21,7 @@ h.addEntry("install", "install or upgrade command on different platform", {
     if (name) {
       if (platform == "apt") return cmd(`sudo apt-get install -y ${name}`);
       if (platform == "yum") return cmd(`sudo yum install -y ${name}`);
-      if (platform == "brew") return cmd(`brew install -y ${name}`);
+      if (platform == "brew") return cmd(`HOMEBREW_NO_AUTO_UPDATE=1 brew install ${name}`);
       if (platform == "choco") return cmd(`choco install -y ${name}`);
     }
 
