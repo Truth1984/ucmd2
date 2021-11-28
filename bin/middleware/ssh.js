@@ -34,7 +34,7 @@ h.addEntry("ssh", "use keygen to generate key pairs", {
 
       if (!name || !desc) return cu.cmderr("name or description not present", "ssh");
       let { user, addr, port } = cu.sshGrep(addrlike);
-      let status = cmd(`ssh-copy-id -i ~/.ssh/id_rsa.pub -p ${port} ${user}@${addr}`, 0, 1, 1).status;
+      let status = cmd(`ssh-copy-id -i ~/.ssh/id_rsa.pub -p ${port} -o LogLevel=DEBUG3 ${user}@${addr}`, 0, 1, 1).status;
       if (status > 0) return cu.cmderr("ssh-copy-id status > 0, abort", "ssh");
       cmd(`u quick ${name} -c "ssh -p ${port} ${user}@${addr}"`);
       cmd(`u ansible -a ${addr}:${port} ${name} '${desc}'`);
