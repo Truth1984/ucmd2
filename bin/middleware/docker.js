@@ -149,10 +149,9 @@ h.addEntry("docker", "docker additional command", {
       if (run) {
         if (!run[1]) run = [target, "/bin/bash"];
         let rid = (await fuzzy(target, true, true)).id;
-        if (!rid) rid = target;
+        if (!rid) return cmd(`sudo docker run -it ${target} ${run[1]}`);
         let status = cmd(`sudo docker ps | grep -q ${rid}`, 0, 1, 1).status;
-        if (status == 0) run[0] = rid;
-        return cmd(`sudo docker ${status > 0 ? "run" : "exec"} -it ${run[0]} ${run[1]}`);
+        return cmd(`sudo docker ${status > 0 ? "run" : "exec"} -it ${rid} ${run[1]}`);
       }
 
       if (remove) {
