@@ -3,7 +3,7 @@ h.addEntry("go", "golang related command", {
   "[0],-t,--target": "target file, default to '.'",
   "-b,--build": "build the target file, can also define [$os] to build all the archs",
   "-o,--output": "output file name",
-  "-m,--main": "build the target file with main os",
+  "-m,--main": "build the target file with main os, exmaple 'u go . -bm' ",
   "-s,--show": "show buildable os and arch",
   "-g,--get": "get all missing packages",
 })
