@@ -6,7 +6,7 @@ h.addEntry("go", "golang related command", {
   "-m,--main": "build the target file with main os, exmaple 'u go . -bm' ",
   "-s,--show": "show buildable os and arch",
   "-g,--get": "get all missing packages",
-  "-G,--getforce": "re-get package even it exist",
+  "-u,--update": "update package",
 })
   .addLink(
     { _: 0, args: "t", kwargs: "target" },
@@ -15,7 +15,7 @@ h.addEntry("go", "golang related command", {
     { args: "m", kwargs: "main" },
     { args: "s", kwargs: "show" },
     { args: "g", kwargs: "get" },
-    { args: "G", kwargs: "getforce" }
+    { args: "u", kwargs: "update" }
   )
   .addAction((argv) => {
     let args = argv.args;
@@ -74,8 +74,8 @@ h.addEntry("go", "golang related command", {
       return cmd(`go get -v`);
     }
 
-    if (getforce) {
-      return cmd(`go get -u ${getforce}`);
+    if (update) {
+      return cmd(`go get -u -v ${update}`);
     }
 
     return cmd(`go run ${target}`);
