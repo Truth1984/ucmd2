@@ -25,7 +25,7 @@ h.addEntry("go", "golang related command", {
     let main = args.m;
     let show = args.s;
     let get = args.g;
-    let getforce = args.G;
+    let update = args.G;
 
     if (build) {
       if (build == true && !main) {
@@ -75,7 +75,7 @@ h.addEntry("go", "golang related command", {
     }
 
     if (update) {
-      return cmd(`go get -u -v ${update}`);
+      return cmd(`go get -v ${update}`);
     }
 
     return cmd(`go run ${target}`);
