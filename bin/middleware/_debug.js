@@ -1,15 +1,15 @@
 const { h, cmd, u, un, cu } = require("../head");
 
 h.addEntry("_server", "open server with test message", {
-  p: "port to open, default:3000",
+  "[0],-p,--port": "port to open, default:3000",
 })
   .addLink({ _: 0, args: "p", kwargs: "port" })
   .addAction((argv) => {
     let args = argv.args;
-    if (!args.p) args.p = [3000];
+    let port = args.p || [3000];
 
     let { Framework } = require("backend-core-bm");
-    let fw = new Framework({ dev: "full-dev", listen: args.p[0] });
+    let fw = new Framework({ dev: "full-dev", listen: port[0] });
 
     fw.perform("process", () => {
       let ipProcess = (req) => {
@@ -43,12 +43,13 @@ h.addEntry("_webtest", "open test docker on port", {
   .addLink({ _: 0, kwargs: "port", args: "p" }, { args: "r", kwargs: "remove" }, { args: "e", kwargs: "execute" })
   .addAction((argv) => {
     let args = argv.args;
+    let port = args.p || 8080;
+
     if (args.r) return cmd(`u docker web-test -r`);
     if (args.e) return cmd(`u docker web-test -e sh`);
 
-    if (!args.p) args.p = [8080];
     cmd(`u docker web-test -r`);
-    return cmd(`sudo docker run -d --name web-test -p ${args.p[0]}:8000 crccheck/hello-world`);
+    return cmd(`sudo docker run -d --name web-test -p ${port}:8000 crccheck/hello-world`);
   });
 
 h.addEntry("_dctp", "docker compose template", { "[0],-a,--amount": "amount of services to initialize" })
@@ -76,4 +77,42 @@ h.addEntry("_dctp", "docker compose template", { "[0],-a,--amount": "amount of s
     }
 
     un.fileWriteSync(cu.yamlWriter(content, 4), 0, "docker-compose.yml");
+  });
+
+h.addEntry("_auth", "auth server wrapped in docker", {
+  "[0],-p,--port": "target port to proxy to",
+  "-P,--porthost": "port to open on host machine, default $port+500",
+  "-u,--user": "username to use, default to awada",
+  "-p,--pass": "password to use, default auto generated",
+  "-h,--host": "host to listen to, default to 'host.docker.internal'",
+  "-s,--server": "server_name for nginx",
+})
+  .addLink(
+    { _: 0, args: "p", kwargs: "port" },
+    { args: "P", kwargs: "porthost" },
+    { args: "u", kwargs: "user" },
+    { args: "p", kwargs: "pass" },
+    { args: "h", kwargs: "host" },
+    { args: "s", kwargs: "server" }
+  )
+  .addAction((argv) => {
+    let args = argv.args;
+    let user = args.u || "awada";
+    let port = args.p;
+    let pass = u.randomPassword(14, 1, 0);
+    let host = args.h || "host.docker.internal";
+    let server = args.s;
+
+    if (!port) return cu.cmderr("proxy port not defined", "_auth");
+    let porthost = args.P || u.int(args.p[0]) + 500;
+
+    console.log(`starting on port ${porthost} with ${pass}`);
+
+    let servername = server ? `-e SERVER_NAME=${server[0]}` : "";
+    let line = `docker run --rm --restart=always --add-host=host.docker.internal:host-gateway \
+    --name "nauth${port}" -p ${porthost}:80 -e BASIC_AUTH_USERNAME=${user} \
+    -e BASIC_AUTH_PASSWORD=${pass} -e PROXY_PASS=${host}:${port} ${servername} \
+    quay.io/dtan4/nginx-basic-auth-proxy`;
+
+    return cmd(line);
   });
