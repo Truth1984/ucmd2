@@ -100,7 +100,7 @@ h.addEntry("_auth", "auth server wrapped in docker", {
     let user = args.u || "awada";
     let port = args.p;
     let pass = u.randomPassword(14, 1, 0);
-    let host = args.h || "host.docker.internal";
+    let host = args.h || "http://host.docker.internal";
     let server = args.s;
 
     if (!port) return cu.cmderr("proxy port not defined", "_auth");
@@ -109,7 +109,7 @@ h.addEntry("_auth", "auth server wrapped in docker", {
     console.log(`starting on port ${porthost} with ${pass}`);
 
     let servername = server ? `-e SERVER_NAME=${server[0]}` : "";
-    let line = `docker run --rm --restart=always --add-host=host.docker.internal:host-gateway \
+    let line = `docker run -d --restart=always --add-host=host.docker.internal:host-gateway \
     --name "nauth${port}" -p ${porthost}:80 -e BASIC_AUTH_USERNAME=${user} \
     -e BASIC_AUTH_PASSWORD=${pass} -e PROXY_PASS=${host}:${port} ${servername} \
     quay.io/dtan4/nginx-basic-auth-proxy`;
