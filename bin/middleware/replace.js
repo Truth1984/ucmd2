@@ -1,5 +1,5 @@
 const { h, u, un, cu } = require("../head");
-h.addEntry("replace", "replace a string in the file", {
+h.addEntry("replace", "replace a string in the file, use -Rg for recursive and global", {
   "[0],-f,--filename": "filename",
   "[1],-p,--pairs": "pairs, json data",
   "-h,--has": "has, check if file contains particular string",
