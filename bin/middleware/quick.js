@@ -32,12 +32,12 @@ h.addEntry("quick", "record command into quick folder", {
         console.table(result);
       });
 
+    let fullPath = un.filePathNormalize(quickPath, name[0]);
+
     if (remove) {
       if (un.fileExist(fullPath)) await un.fileDelete(fullPath);
       return cmd(`u quick --display`);
     }
-
-    let fullPath = un.filePathNormalize(quickPath, name[0]);
 
     if (command) return un.fileWriteSync(command, false, fullPath);
 
