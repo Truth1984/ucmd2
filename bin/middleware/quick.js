@@ -6,13 +6,15 @@ h.addEntry("quick", "record command into quick folder", {
   "-d,--display": "display commands in a table",
   "-r,--remove": "remove command",
   "-a,--append": "replace ... with value, then add to end if ... not exist",
+  "-e,--edit": "nano script",
 })
   .addLink(
     { _: 0, args: "n", kwargs: "name" },
     { args: "c", kwargs: "command" },
     { args: "d", kwargs: "display" },
-    { args: "r", kwargs: "remove" },
-    { args: "a", kwargs: "append" }
+    { $: 0, args: "r", kwargs: "remove" },
+    { args: "a", kwargs: "append" },
+    { $: 0, args: "e", kwargs: "edit" }
   )
   .addAction(async (argv) => {
     let quickPath = un.filePathNormalize(__dirname, "../../quick");
@@ -24,6 +26,7 @@ h.addEntry("quick", "record command into quick folder", {
     let display = args.d;
     let remove = args.r;
     let append = args.a;
+    let edit = args.e;
 
     if (display)
       return un.fileReaddir(quickPath).then((aom) => {
@@ -40,6 +43,8 @@ h.addEntry("quick", "record command into quick folder", {
     }
 
     if (command) return un.fileWriteSync(command, false, fullPath);
+
+    if (edit && un.fileExist(fullPath)) return cmd(`nano ${fullPath}`);
 
     let qcmd = un.fileExist(fullPath)
       ? un.fileReadSync(fullPath)
