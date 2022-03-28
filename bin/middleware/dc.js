@@ -43,7 +43,7 @@ h.addEntry("dc", "docker-compose command", {
     if (up || debug) {
       if (!un.fileExist(".env")) cmd(`touch .env`);
       let line = debug ? "--log-level DEBUG" : "";
-      return cmd(`sudo docker-compose ${line} --env-file .env up -d`);
+      return cmd(`CPWD=$PWD sudo docker-compose ${line} --env-file .env up -d`);
     }
     if (down) return cmd("sudo docker-compose down --remove-orphans");
     if (images) return cmd("sudo docker-compose images");
