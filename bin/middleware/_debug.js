@@ -67,9 +67,9 @@ h.addEntry("_dctp", "docker compose template", { "[0],-a,--amount": "amount of s
     };
     for (let i = 0; i < amount; i++) {
       content.services["registry" + i] = {
-        image: "registry:latest",
+        image: "registry",
         extra_hosts: ["host.docker.internal:host-gateway"],
-        environment: ["DEBUG=1"],
+        environment: ["TZ=Asia/Hongkong"],
         ports: ["8000:8000"],
         volumes: [`volume${i}:/v${i}`],
         restart: "always",
