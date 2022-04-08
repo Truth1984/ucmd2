@@ -2,11 +2,13 @@ const { h, cmd, u, un, cu } = require("../head");
 
 h.addEntry("_server", "open server with test message", {
   "[0],-p,--port": "port to open, default:3000",
+  "-m,--message": "message to show",
 })
-  .addLink({ _: 0, args: "p", kwargs: "port" })
+  .addLink({ _: 0, args: "p", kwargs: "port" }, { args: "m", kwargs: "message" })
   .addAction((argv) => {
     let args = argv.args;
     let port = args.p || [3000];
+    let message = args.m ? args.m[0] : "";
 
     let { Framework } = require("backend-core-bm");
     let fw = new Framework({ dev: "full-dev", listen: port[0] });
@@ -21,6 +23,7 @@ h.addEntry("_server", "open server with test message", {
       fw.router("/", (body, req, res, next) => {
         content = { body, headers: req.headers, query: req.query, ip: ipProcess(req), date: new Date() };
         fw.logger.info(content);
+        if (message) return message;
         return content;
       });
     });
