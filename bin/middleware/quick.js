@@ -1,4 +1,4 @@
-const { h, cmd, cu, un } = require("../head");
+const { h, cmd, cu, un, u } = require("../head");
 
 h.addEntry("quick", "record command into quick folder", {
   "[0],-n,--name": "name of quick command",
@@ -49,6 +49,7 @@ h.addEntry("quick", "record command into quick folder", {
     let qcmd = un.fileExist(fullPath)
       ? un.fileReadSync(fullPath)
       : cu.cmderr(`quick command <${name}> not found`, "quick");
+    if (!append) qcmd = u.stringReplace(qcmd, { "\\.\\.\\.": "" });
     if (append)
       for (let i of append) {
         if (qcmd.indexOf("...") > -1) {
