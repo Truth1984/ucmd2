@@ -29,7 +29,7 @@ h.addEntry("post", "send post request", {
 
     if (debug) {
       let curlx = `-X ${get ? "GET" : "POST"} `;
-      if (json) curlx += `-d ${u.jsonToString(data)} `;
+      if (json) curlx += `-d '${u.jsonToString(data)}' `;
       if (headers) for (let [i, j] of u.mapEntries(header)) curlx += `-H ${i}:${j} `;
       curlx += `-w'     time_namelookup:  %{time_namelookup}s\\n      time_connect:  %{time_connect}s\\n   time_appconnect:  %{time_appconnect}s\\n  time_pretransfer:  %{time_pretransfer}s\\n     time_redirect:  %{time_redirect}s\\ntime_starttransfer:  %{time_starttransfer}s\\n                   ----------\\n        time_total:  %{time_total}s\\n'`;
       return cmd(`curl ${curlx} -s ${url}`, true);
