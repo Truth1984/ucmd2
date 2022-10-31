@@ -54,7 +54,7 @@ h.addEntry("dc", "docker-compose command", {
 
     let key = await cu.multiSelect(u.mapKeys(cu.yamlParser(un.fileReadSync("docker-compose.yml")).services));
     if (log) return cmd(`sudo docker-compose logs ${key} | tail -n500`);
-    if (live) return cmd(`sudo docker-compose logs -f ${key}`);
+    if (live) return cmd(`sudo docker-compose logs -f --tail 500 ${key}`);
     if (execute) {
       if (u.equal(execute, [])) execute = ["/bin/sh"];
       execute = u.arrayToString(execute, " ");

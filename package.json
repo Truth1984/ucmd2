@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Truth1984/ucmd2#readme",
   "dependencies": {
     "awadau": "^1.1.14",
-    "backend-core-bm": "^1.0.4",
+    "backend-core-bm": "^1.0.8",
     "cmdline-util": "^1.2.1",
     "download": "^6.2.5",
     "fluent-ffmpeg": "^2.1.2",
