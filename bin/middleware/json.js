@@ -5,6 +5,7 @@ h.addEntry("json", "parse result to json", {
   "-c,--command": "command line result to json",
   "-s,--shell": "cu.shellParser to perform on --command, takes in {separator,skipHead,skipTail,selfProvideHeader,REST}",
   "-j,--stringify": "stringify the result",
+  "-g,--get": "get json value from path, take in multiple value",
   "-e,--eval": "eval js on object `json`",
 })
   .addLink(
@@ -13,6 +14,7 @@ h.addEntry("json", "parse result to json", {
     { args: "f", kwargs: "file" },
     { args: "c", kwargs: "command" },
     { args: "j", kwargs: "stringify" },
+    { args: "g", kwargs: "get" },
     { args: "e", kwargs: "eval" }
   )
   .addAction((argv) => {
@@ -22,6 +24,7 @@ h.addEntry("json", "parse result to json", {
     let file = args.f;
     let command = args.c;
     let stringify = args.j;
+    let gets = args.g;
     let evals = args.e;
 
     let json = {};
@@ -35,6 +38,7 @@ h.addEntry("json", "parse result to json", {
       json = cu.shellParser(json, option);
     }
 
+    if (gets) return console.log(u.mapGetPath(json, gets, ""));
     if (evals) return console.log(eval("(" + evals[0] + ")"));
     if (stringify) return console.log(u.jsonToString(json, ""));
     console.log(json);
