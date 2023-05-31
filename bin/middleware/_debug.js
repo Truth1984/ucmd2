@@ -11,7 +11,7 @@ h.addEntry("_server", "open server with test message", {
     let message = args.m ? args.m[0] : "";
 
     let { Framework } = require("backend-core-bm");
-    let fw = new Framework({ dev: "full-dev", listen: port[0] });
+    let fw = new Framework({ dev: "full-dev", listen: port[0], cors: true });
 
     fw.perform("process", () => {
       let ipProcess = (req) => {
