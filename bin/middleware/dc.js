@@ -7,6 +7,7 @@ h.addEntry("dc", "docker-compose command", {
   "-b,--build": "build image",
   "-p,--process": "process list AKA containter",
   "-r,--stop": "stop container and remove corresponding volume",
+  "-k,--kill": "kill process by force",
   "-R,--restart": "restart the container",
   "-e,--execute": "execute bash command",
   "-L,--live": "live log",
@@ -20,6 +21,7 @@ h.addEntry("dc", "docker-compose command", {
     { args: "b", kwargs: "build" },
     { args: "p", kwargs: "process" },
     { args: "r", kwargs: "stop" },
+    { args: "k", kwargs: "kill" },
     { args: "R", kwargs: "restart" },
     { args: "e", kwargs: "execute" },
     { args: "L", kwargs: "live" },
@@ -34,6 +36,7 @@ h.addEntry("dc", "docker-compose command", {
     let build = args.b;
     let processes = args.p;
     let stop = args.r;
+    let kill = args.k;
     let restart = args.R;
     let execute = args.e;
     let live = args.L;
@@ -51,6 +54,13 @@ h.addEntry("dc", "docker-compose command", {
     if (stop) return cmd("sudo docker-compose rm -s");
     if (restart) return cmd("sudo docker-compose restart");
     if (processes) return cmd("sudo docker-compose ps -a");
+
+    if (kill) {
+      let pkey = u.stringToArray(cmd("sudo docker-compose ps -q", undefined, true).trim(), "\n");
+      let pkeyPid = pkey.map((i) => cmd(`sudo docker inspect -f '{{.State.Pid}}' ${i}`, undefined, true).trim());
+      for (let i of pkeyPid) cmd(`kill -9 ${i}`);
+      return console.log(pkeyPid);
+    }
 
     let key = await cu.multiSelect(u.mapKeys(cu.yamlParser(un.fileReadSync("docker-compose.yml")).services));
     if (log) return cmd(`sudo docker-compose logs ${key} | tail -n500`);
