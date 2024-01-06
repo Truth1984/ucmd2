@@ -4,6 +4,7 @@ h.addEntry("proxy", "proxy the command", {
   "-n,--noproxy": "command not to use proxy",
   "-g,--generate": "generate proxy export string",
   "-G,--get": "get system proxy",
+  "-l,--local": "local proxy, local ip + 15456",
   "-s,--string": "generate string for cmdline",
 })
   .addLink(
@@ -11,6 +12,7 @@ h.addEntry("proxy", "proxy the command", {
     { args: "n", kwargs: "noproxy" },
     { args: "g", kwargs: "generate" },
     { args: "G", kwargs: "get" },
+    { args: "l", kwargs: "local" },
     { args: "s", kwargs: "string" }
   )
   .addAction((argv) => {
@@ -19,13 +21,16 @@ h.addEntry("proxy", "proxy the command", {
     let noproxy = args.n;
     let generate = args.g;
     let Get = args.G;
+    let local = args.l;
     let string = args.s;
 
     let proxystr = "";
     let env = process.env;
     let checkKey = ["https_proxy", "http_proxy", "HTTPS_PROXY", "HTTP_PROXY", "no_proxy", "NO_PROXY"];
 
-    if (Get) return console.log(process.env.HTTP_PROXY);
+    if (Get) return cmd("echo $HTTP_PROXY");
+
+    if (local) return console.log(`http://${cmd("u ip --private")}:15456`);
 
     if (generate) {
       let url = generate[0];

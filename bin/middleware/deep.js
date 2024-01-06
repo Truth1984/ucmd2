@@ -19,10 +19,12 @@ h.addEntry("deep", "deep logic operation", {
     let dockerRun = (image, name, onceCmd, extraArg = "", useProxy) => {
       let args = "";
       if (name) args += `--name ${name} `;
-      args += "-d --add-host=host.docker.internal:host-gateway";
+      args += "-d --add-host=host.docker.internal:host-gateway ";
       args += extraArg + " ";
-      let px = process.env.HTTP_PROXY;
-      if (useProxy) args += `-e HTTPS_PROXY=${px} -e HTTP_PROXY=${px} -e https_proxy=${px} -e http_proxy=${px}`;
+      if (useProxy) {
+        let px = cmd("u proxy -l", false, true);
+        args += `-e HTTPS_PROXY=${px} -e HTTP_PROXY=${px} -e https_proxy=${px} -e http_proxy=${px}`;
+      }
       if (onceCmd) args += "--rm ";
       let entry = u.typeCheck(onceCmd, "str") ? onceCmd : "";
       let sentence = `docker run ${args} ${image} ${entry}`;
@@ -30,8 +32,8 @@ h.addEntry("deep", "deep logic operation", {
     };
 
     let args = argv.args;
-    let download = args.d;
-    let downpath = args.P ? args.P : "/download";
+    let download = args.d[0];
+    let downpath = args.P ? args.P[0] : "/download";
 
     if (download) {
       if (u.contains(download, ".m3u8")) {
@@ -40,14 +42,14 @@ h.addEntry("deep", "deep logic operation", {
         let dest = un.filePathNormalize(downpath, sname);
         let dname = "m3u8_" + sname;
         let reachable = await urlReachale(source);
-        let ffmpegCmd = `-headers 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36' -fflags +genpts -y -i ${download} -c copy ${dest}`;
+        let ffmpegCmd = `-headers 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36' -fflags +genpts -y -i '${download}' -c copy ${dest}`;
         return dockerRun("jrottenberg/ffmpeg:4-alpine", dname, ffmpegCmd, "", !reachable);
       } else if (u.contains(download, "youtube.com")) {
         let dockername = paths.basename(download).replace(/[^\w\.]/gi, "");
         let dname = "ytb_" + dockername;
         let destDir = un.filePathNormalize(downpath);
         let newname = `--output '/workdir/${dockername}.%(ext)s'`;
-        let ytbdlCmd = `-f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' ${download} ${newname}`;
+        let ytbdlCmd = `-f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' '${download}' ${newname}`;
         return dockerRun("mikenye/youtube-dl", dname, ytbdlCmd, `-e PGID=0 -e PUID=0 -v ${destDir}:/workdir`, true);
       }
     }
