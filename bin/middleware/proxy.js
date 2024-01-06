@@ -3,12 +3,14 @@ h.addEntry("proxy", "proxy the command", {
   "[0],-c,--command": "command to use proxy",
   "-n,--noproxy": "command not to use proxy",
   "-g,--generate": "generate proxy export string",
+  "-G,--get": "get system proxy",
   "-s,--string": "generate string for cmdline",
 })
   .addLink(
     { _: 0, args: "c", kwargs: "command" },
     { args: "n", kwargs: "noproxy" },
     { args: "g", kwargs: "generate" },
+    { args: "G", kwargs: "get" },
     { args: "s", kwargs: "string" }
   )
   .addAction((argv) => {
@@ -16,11 +18,14 @@ h.addEntry("proxy", "proxy the command", {
     let command = args.c;
     let noproxy = args.n;
     let generate = args.g;
+    let Get = args.G;
     let string = args.s;
 
     let proxystr = "";
     let env = process.env;
     let checkKey = ["https_proxy", "http_proxy", "HTTPS_PROXY", "HTTP_PROXY", "no_proxy", "NO_PROXY"];
+
+    if (Get) return console.log(process.env.HTTP_PROXY);
 
     if (generate) {
       let url = generate[0];

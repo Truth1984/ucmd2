@@ -28,6 +28,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^10.0.0",
     "iconv-lite": "^0.6.2",
+    "is-reachable": "^5.2.1",
     "os-utils": "^0.0.14",
     "readdirp": "^3.6.0",
     "uuid": "^8.3.2",
