@@ -30,7 +30,7 @@ h.addEntry("proxy", "proxy the command", {
 
     if (Get) return cmd("echo $HTTP_PROXY");
 
-    if (local) return console.log(`http://${cmd("u ip --private")}:15456`);
+    if (local) return console.log(`http://${cmd("u ip --private", false, true).replace("\n", "")}:15456`);
 
     if (generate) {
       let url = generate[0];
