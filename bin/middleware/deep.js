@@ -5,7 +5,7 @@ const urls = require("url");
 
 h.addEntry("deep", "deep logic operation", {
   "-d,--down,--download": "download url from youtube or m3u8 or mp4",
-  "-P,--path,--downpath": "download path default set to /ss/down",
+  "-P,--path,--downpath": "download path default set to /download",
 })
   .addLink(
     { args: "d", kwargs: "download" },
@@ -31,7 +31,7 @@ h.addEntry("deep", "deep logic operation", {
 
     let args = argv.args;
     let download = args.d;
-    let downpath = args.P ? args.P : "/ss/down";
+    let downpath = args.P ? args.P : "/download";
 
     if (download) {
       if (u.contains(download, ".m3u8")) {
