@@ -52,7 +52,7 @@ h.addEntry("deep", "deep logic operation", {
       } else if (u.contains(download, "youtube.com")) {
         let dockername = paths.basename(download).replace(/[^\w\.]/gi, "");
         let dname = "ytb_" + dockername;
-        let destDir = un.filePathNormalize(downpath);
+        let destDir = un.filePathNormalize(downPath);
         let newname = `--output '/workdir/${downName ? downName : dockername}.%(ext)s'`;
         let ytbdlCmd = `-f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' '${download}' ${newname}`;
         return dockerRun("mikenye/youtube-dl", dname, ytbdlCmd, `-e PGID=0 -e PUID=0 -v ${destDir}:/workdir`, true);
