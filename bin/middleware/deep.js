@@ -7,16 +7,24 @@ h.addEntry("deep", "deep logic operation", {
   "-d,--down,--download": "download url from youtube or m3u8 or mp4",
   "-P,--path,--downpath": "download path default set to /download",
   "-n,--name": "download final name",
+  "-s,--save": "save container after exit",
 })
   .addLink(
     { args: "d", kwargs: "download" },
     { args: "d", kwargs: "down" },
     { args: "P", kwargs: "path" },
     { args: "P", kwargs: "downpath" },
-    { args: "n", kwargs: "name" }
+    { args: "n", kwargs: "name" },
+    { args: "s", kwargs: "save" }
   )
   .addAction(async (argv) => {
     let urlReachale = async (url) => reach(new urls.URL(u.url(url)).host);
+
+    let args = argv.args;
+    let download = args.d[0];
+    let downPath = args.P ? args.P[0] : "/download";
+    let downName = args.n ? args.n[0] : undefined;
+    let downSave = !!args.s;
 
     let dockerRun = (image, name, onceCmd, extraArg = "", useProxy) => {
       let args = "";
@@ -27,16 +35,12 @@ h.addEntry("deep", "deep logic operation", {
         let px = cmd("u proxy -l", false, true).replace("\n", "");
         args += `-e HTTPS_PROXY=${px} -e HTTP_PROXY=${px} -e https_proxy=${px} -e http_proxy=${px}`;
       }
-      if (onceCmd) args += "--rm ";
+
+      if (!downSave) args += " --rm ";
       let entry = u.typeCheck(onceCmd, "str") ? onceCmd : "";
       let sentence = `docker run ${args} ${image} ${entry}`;
       return cmd(sentence, true);
     };
-
-    let args = argv.args;
-    let download = args.d[0];
-    let downPath = args.P ? args.P[0] : "/download";
-    let downName = args.n ? args.n[0] : undefined;
 
     if (download) {
       if (downName && u.fileExtension(downName) != ".mp4") downName += ".mp4";

@@ -7,6 +7,7 @@ if (entry == "--help") {
   for (let i of fs.readdirSync(__dirname + "/middleware")) require(__dirname + "/middleware/" + i);
 } else {
   require(__dirname + "/middleware/_debug.js");
+  require(__dirname + "/middleware/_test.js");
   let dir = __dirname + "/middleware/" + entry + ".js";
   if (un.fileExist(dir)) require(dir);
 }

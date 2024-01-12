@@ -15,3 +15,7 @@ h.addEntry("_dlink", "display link storage", { "[0],-l,--link": "link to display
 h.addEntry("_echo", "echo the command", { "[0],-l,--line": "the line to echo", "-e": "extra $ args test" })
   .addLink({ _: 0, args: "l", kwargs: "line" }, { $: 0, args: "e" })
   .addAction((argv) => console.log(argv.kwargs.line[0]));
+
+h.addEntry("_kwargs", "display single kwargs content, as ds")
+  .addLink({ kwargs: "ds" })
+  .addAction((argv) => console.log(argv.kwargs.ds ? "kwargs ds success" : "kwargs ds not found"));
