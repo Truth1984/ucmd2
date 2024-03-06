@@ -2,12 +2,14 @@ const { h, cmd, u, un, cu } = require("../head");
 
 h.addEntry("_server", "open server with test message", {
   "[0],-p,--port": "port to open, default:3000",
+  "-d,--directory": "directory to serve to public",
   "-m,--message": "message to show",
 })
-  .addLink({ _: 0, args: "p", kwargs: "port" }, { args: "m", kwargs: "message" })
+  .addLink({ _: 0, args: "p", kwargs: "port" }, { args: "d", kwargs: "directory" }, { args: "m", kwargs: "message" })
   .addAction((argv) => {
     let args = argv.args;
     let port = args.p || [3000];
+    let directory = args.d ? args.d[0] : "";
     let message = args.m ? args.m[0] : "";
 
     let { Framework } = require("backend-core-bm");
@@ -19,6 +21,8 @@ h.addEntry("_server", "open server with test message", {
         if (ip == "1") return "127.0.0.1";
         return ip;
       };
+
+      if (directory) fw.app.use(fw.express.static(un.filePathNormalize(directory)));
 
       fw.router("/", (body, req, res, next) => {
         content = { body, headers: req.headers, query: req.query, ip: ipProcess(req), date: new Date() };
