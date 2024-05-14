@@ -1,5 +1,5 @@
 const { h, cmd, u, cu, un } = require("../head");
-h.addEntry("dc", "docker-compose command", {
+h.addEntry("dc", "docker compose command", {
   "-u,--up": "up, detached mode",
   "-d,--down": "down, and remove orphan",
   "-D,--debug": "up, debug mode",
@@ -42,32 +42,32 @@ h.addEntry("dc", "docker-compose command", {
     let live = args.L;
     let log = args.l;
 
-    if (!un.fileExist("docker-compose.yml")) return cu.cmderr("docker-compose.yml doesn't exist", "dc");
+    if (!un.fileExist("docker compose.yml")) return cu.cmderr("docker compose.yml doesn't exist", "dc");
     if (up || debug) {
       if (!un.fileExist(".env")) cmd(`touch .env`);
       let line = debug ? "--log-level DEBUG" : "";
-      return cmd(`sudo CPWD=$PWD docker-compose ${line} --env-file .env up -d`);
+      return cmd(`sudo CPWD=$PWD docker compose ${line} --env-file .env up -d`);
     }
-    if (down) return cmd("sudo docker-compose down --remove-orphans");
-    if (images) return cmd("sudo docker-compose images");
-    if (build) return cmd("sudo docker-compose build --force-rm");
-    if (stop) return cmd("sudo docker-compose rm -s");
-    if (restart) return cmd("sudo docker-compose restart");
-    if (processes) return cmd("sudo docker-compose ps -a");
+    if (down) return cmd("sudo docker compose down --remove-orphans");
+    if (images) return cmd("sudo docker compose images");
+    if (build) return cmd("sudo docker compose build --force-rm");
+    if (stop) return cmd("sudo docker compose rm -s");
+    if (restart) return cmd("sudo docker compose restart");
+    if (processes) return cmd("sudo docker compose ps -a");
 
     if (kill) {
-      let pkey = u.stringToArray(cmd("sudo docker-compose ps -q", undefined, true).trim(), "\n");
+      let pkey = u.stringToArray(cmd("sudo docker compose ps -q", undefined, true).trim(), "\n");
       let pkeyPid = pkey.map((i) => cmd(`sudo docker inspect -f '{{.State.Pid}}' ${i}`, undefined, true).trim());
       for (let i of pkeyPid) cmd(`kill -9 ${i}`);
       return console.log(pkeyPid);
     }
 
-    let key = await cu.multiSelect(u.mapKeys(cu.yamlParser(un.fileReadSync("docker-compose.yml")).services));
-    if (log) return cmd(`sudo docker-compose logs ${key} | tail -n500`);
-    if (live) return cmd(`sudo docker-compose logs -f --tail 500 ${key}`);
+    let key = await cu.multiSelect(u.mapKeys(cu.yamlParser(un.fileReadSync("docker compose.yml")).services));
+    if (log) return cmd(`sudo docker compose logs ${key} | tail -n500`);
+    if (live) return cmd(`sudo docker compose logs -f --tail 500 ${key}`);
     if (execute) {
       if (u.equal(execute, [])) execute = ["/bin/sh"];
       execute = u.arrayToString(execute, " ");
-      return cmd(`sudo docker-compose exec --privileged ${key} ${execute}`);
+      return cmd(`sudo docker compose exec --privileged ${key} ${execute}`);
     }
   });
