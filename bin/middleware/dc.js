@@ -42,7 +42,7 @@ h.addEntry("dc", "docker compose command", {
     let live = args.L;
     let log = args.l;
 
-    if (!un.fileExist("docker compose.yml")) return cu.cmderr("docker compose.yml doesn't exist", "dc");
+    if (!un.fileExist("docker-compose.yml")) return cu.cmderr("docker-compose.yml doesn't exist", "dc");
     if (up || debug) {
       if (!un.fileExist(".env")) cmd(`touch .env`);
       let line = debug ? "--log-level DEBUG" : "";
@@ -62,7 +62,7 @@ h.addEntry("dc", "docker compose command", {
       return console.log(pkeyPid);
     }
 
-    let key = await cu.multiSelect(u.mapKeys(cu.yamlParser(un.fileReadSync("docker compose.yml")).services));
+    let key = await cu.multiSelect(u.mapKeys(cu.yamlParser(un.fileReadSync("docker-compose.yml")).services));
     if (log) return cmd(`sudo docker compose logs ${key} | tail -n500`);
     if (live) return cmd(`sudo docker compose logs -f --tail 500 ${key}`);
     if (execute) {

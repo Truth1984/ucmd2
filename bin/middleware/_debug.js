@@ -66,7 +66,7 @@ h.addEntry("_dctp", "docker compose template", { "[0],-a,--amount": "amount of s
     let amount = args.a;
     if (u.equal(amount, []) || !amount) amount = [1];
     amount = amount[0];
-    if (un.fileExist("docker compose.yml")) return cu.cmderr("docker compose.yml already exists", "_dctp");
+    if (un.fileExist("docker-compose.yml")) return cu.cmderr("docker-compose.yml already exists", "_dctp");
 
     let content = {
       version: "3.8",
@@ -83,7 +83,7 @@ h.addEntry("_dctp", "docker compose template", { "[0],-a,--amount": "amount of s
       };
     }
 
-    un.fileWriteSync(cu.yamlWriter(content, 4), 0, "docker compose.yml");
+    un.fileWriteSync(cu.yamlWriter(content, 4), 0, "docker-compose.yml");
   });
 
 h.addEntry("_auth", "auth server wrapped in docker", {
